@@ -1,0 +1,101 @@
+mapping_id,source_framework,source_control_id,target_framework,target_control_id,mapping_type,mapping_notes
+MAP001,NIST_800_53_R5,AC-1,SOC2_TSC_2017,CC5.3,equivalent,Access control policy maps to policy deployment
+MAP002,NIST_800_53_R5,AC-1,SOC2_TSC_2017,CC6.1,related,Access control policy supports logical access controls
+MAP003,NIST_800_53_R5,AC-2,SOC2_TSC_2017,CC6.2,equivalent,Account management maps to user access management
+MAP004,NIST_800_53_R5,AC-2,SOC2_TSC_2017,CC6.3,equivalent,Account management maps to access provisioning
+MAP005,NIST_800_53_R5,AC-3,SOC2_TSC_2017,CC6.1,equivalent,Access enforcement maps to logical access controls
+MAP006,NIST_800_53_R5,AC-3,SOC2_TSC_2017,CC6.3,related,Access enforcement supports access provisioning
+MAP007,NIST_800_53_R5,AC-4,SOC2_TSC_2017,CC6.7,equivalent,Information flow enforcement maps to information transmission
+MAP008,NIST_800_53_R5,AC-5,SOC2_TSC_2017,CC5.1,equivalent,Separation of duties maps to control activities risk mitigation
+MAP009,NIST_800_53_R5,AC-6,SOC2_TSC_2017,CC6.1,equivalent,Least privilege maps to logical access controls
+MAP010,NIST_800_53_R5,AC-6,SOC2_TSC_2017,CC6.3,related,Least privilege supports access provisioning
+MAP011,NIST_800_53_R5,AC-7,SOC2_TSC_2017,CC6.1,related,Unsuccessful logon attempts supports logical access
+MAP012,NIST_800_53_R5,AC-8,SOC2_TSC_2017,CC6.1,related,System use notification supports logical access
+MAP013,NIST_800_53_R5,AC-11,SOC2_TSC_2017,CC6.1,related,Device lock supports logical access controls
+MAP014,NIST_800_53_R5,AC-17,SOC2_TSC_2017,CC6.1,equivalent,Remote access maps to logical access controls
+MAP015,NIST_800_53_R5,AC-17,SOC2_TSC_2017,CC6.6,related,Remote access supports external threats mitigation
+MAP016,NIST_800_53_R5,AC-18,SOC2_TSC_2017,CC6.1,related,Wireless access supports logical access controls
+MAP017,NIST_800_53_R5,AC-19,SOC2_TSC_2017,CC6.7,related,Mobile device access supports information transmission
+MAP018,NIST_800_53_R5,AC-20,SOC2_TSC_2017,CC6.6,equivalent,External systems maps to external threats mitigation
+MAP019,NIST_800_53_R5,AT-1,SOC2_TSC_2017,CC1.4,equivalent,Training policy maps to competent individuals
+MAP020,NIST_800_53_R5,AT-2,SOC2_TSC_2017,CC1.4,equivalent,Security awareness maps to competent individuals
+MAP021,NIST_800_53_R5,AT-3,SOC2_TSC_2017,CC1.4,equivalent,Role-based training maps to competent individuals
+MAP022,NIST_800_53_R5,AU-1,SOC2_TSC_2017,CC5.3,related,Audit policy supports policy deployment
+MAP023,NIST_800_53_R5,AU-2,SOC2_TSC_2017,CC7.2,equivalent,Event logging maps to security monitoring
+MAP024,NIST_800_53_R5,AU-3,SOC2_TSC_2017,CC7.2,related,Audit content supports security monitoring
+MAP025,NIST_800_53_R5,AU-6,SOC2_TSC_2017,CC7.2,equivalent,Audit review maps to security monitoring
+MAP026,NIST_800_53_R5,AU-6,SOC2_TSC_2017,CC7.3,related,Audit review supports security event analysis
+MAP027,NIST_800_53_R5,AU-9,SOC2_TSC_2017,CC6.1,related,Audit protection supports logical access
+MAP028,NIST_800_53_R5,AU-12,SOC2_TSC_2017,CC7.2,equivalent,Audit generation maps to security monitoring
+MAP029,NIST_800_53_R5,CA-1,SOC2_TSC_2017,CC4.1,related,Assessment policy supports ongoing evaluations
+MAP030,NIST_800_53_R5,CA-2,SOC2_TSC_2017,CC4.1,equivalent,Control assessments maps to ongoing evaluations
+MAP031,NIST_800_53_R5,CA-5,SOC2_TSC_2017,CC4.2,equivalent,POA&M maps to deficiency communication
+MAP032,NIST_800_53_R5,CA-7,SOC2_TSC_2017,CC4.1,equivalent,Continuous monitoring maps to ongoing evaluations
+MAP033,NIST_800_53_R5,CM-1,SOC2_TSC_2017,CC5.3,related,Config management policy supports policy deployment
+MAP034,NIST_800_53_R5,CM-2,SOC2_TSC_2017,CC7.1,equivalent,Baseline configuration maps to system configuration
+MAP035,NIST_800_53_R5,CM-3,SOC2_TSC_2017,CC8.1,equivalent,Configuration change control maps to change management
+MAP036,NIST_800_53_R5,CM-4,SOC2_TSC_2017,CC8.1,related,Impact analyses supports change management
+MAP037,NIST_800_53_R5,CM-6,SOC2_TSC_2017,CC7.1,equivalent,Configuration settings maps to system configuration
+MAP038,NIST_800_53_R5,CM-7,SOC2_TSC_2017,CC6.8,related,Least functionality supports malicious software prevention
+MAP039,NIST_800_53_R5,CM-8,SOC2_TSC_2017,CC6.1,related,System inventory supports logical access controls
+MAP040,NIST_800_53_R5,CP-1,SOC2_TSC_2017,A1.2,related,Contingency policy supports recovery controls
+MAP041,NIST_800_53_R5,CP-2,SOC2_TSC_2017,A1.2,equivalent,Contingency plan maps to environmental and recovery controls
+MAP042,NIST_800_53_R5,CP-4,SOC2_TSC_2017,A1.3,equivalent,Contingency plan testing maps to recovery testing
+MAP043,NIST_800_53_R5,CP-9,SOC2_TSC_2017,A1.2,equivalent,System backup maps to recovery controls
+MAP044,NIST_800_53_R5,CP-10,SOC2_TSC_2017,CC7.5,equivalent,Recovery and reconstitution maps to incident recovery
+MAP045,NIST_800_53_R5,IA-1,SOC2_TSC_2017,CC6.1,related,IA policy supports logical access controls
+MAP046,NIST_800_53_R5,IA-2,SOC2_TSC_2017,CC6.1,equivalent,User identification maps to logical access controls
+MAP047,NIST_800_53_R5,IA-4,SOC2_TSC_2017,CC6.1,equivalent,Identifier management maps to logical access controls
+MAP048,NIST_800_53_R5,IA-5,SOC2_TSC_2017,CC6.1,equivalent,Authenticator management maps to logical access controls
+MAP049,NIST_800_53_R5,IA-8,SOC2_TSC_2017,CC6.1,related,Non-org users supports logical access controls
+MAP050,NIST_800_53_R5,IR-1,SOC2_TSC_2017,CC7.4,related,IR policy supports incident response
+MAP051,NIST_800_53_R5,IR-4,SOC2_TSC_2017,CC7.4,equivalent,Incident handling maps to incident response
+MAP052,NIST_800_53_R5,IR-5,SOC2_TSC_2017,CC7.3,equivalent,Incident monitoring maps to security event analysis
+MAP053,NIST_800_53_R5,IR-6,SOC2_TSC_2017,CC7.4,related,Incident reporting supports incident response
+MAP054,NIST_800_53_R5,IR-8,SOC2_TSC_2017,CC7.4,equivalent,IR plan maps to incident response
+MAP055,NIST_800_53_R5,MA-2,SOC2_TSC_2017,CC6.4,related,Controlled maintenance supports physical access
+MAP056,NIST_800_53_R5,MP-2,SOC2_TSC_2017,CC6.5,related,Media access supports asset disposal
+MAP057,NIST_800_53_R5,MP-6,SOC2_TSC_2017,CC6.5,equivalent,Media sanitization maps to asset disposal
+MAP058,NIST_800_53_R5,PE-2,SOC2_TSC_2017,CC6.4,equivalent,Physical access authorizations maps to physical access
+MAP059,NIST_800_53_R5,PE-3,SOC2_TSC_2017,CC6.4,equivalent,Physical access control maps to physical access restrictions
+MAP060,NIST_800_53_R5,PE-6,SOC2_TSC_2017,CC6.4,related,Physical monitoring supports physical access
+MAP061,NIST_800_53_R5,PL-1,SOC2_TSC_2017,CC5.3,related,Planning policy supports policy deployment
+MAP062,NIST_800_53_R5,PL-2,SOC2_TSC_2017,CC3.1,equivalent,Security plans maps to objectives specification
+MAP063,NIST_800_53_R5,PM-9,SOC2_TSC_2017,CC3.2,equivalent,Risk management strategy maps to risk identification
+MAP064,NIST_800_53_R5,PS-2,SOC2_TSC_2017,CC1.4,related,Position risk designation supports competent individuals
+MAP065,NIST_800_53_R5,PS-3,SOC2_TSC_2017,CC1.4,equivalent,Personnel screening maps to competent individuals
+MAP066,NIST_800_53_R5,PS-4,SOC2_TSC_2017,CC6.2,equivalent,Personnel termination maps to user access management
+MAP067,NIST_800_53_R5,PS-5,SOC2_TSC_2017,CC6.2,related,Personnel transfer supports user access management
+MAP068,NIST_800_53_R5,RA-1,SOC2_TSC_2017,CC3.2,related,Risk assessment policy supports risk identification
+MAP069,NIST_800_53_R5,RA-2,SOC2_TSC_2017,CC3.1,equivalent,Security categorization maps to objectives specification
+MAP070,NIST_800_53_R5,RA-3,SOC2_TSC_2017,CC3.2,equivalent,Risk assessment maps to risk identification
+MAP071,NIST_800_53_R5,RA-5,SOC2_TSC_2017,CC7.1,equivalent,Vulnerability scanning maps to system configuration
+MAP072,NIST_800_53_R5,SA-4,SOC2_TSC_2017,CC9.2,equivalent,Acquisition process maps to vendor risk management
+MAP073,NIST_800_53_R5,SA-9,SOC2_TSC_2017,CC9.2,equivalent,External services maps to vendor risk management
+MAP074,NIST_800_53_R5,SC-5,SOC2_TSC_2017,A1.1,related,DoS protection supports availability planning
+MAP075,NIST_800_53_R5,SC-7,SOC2_TSC_2017,CC6.6,equivalent,Boundary protection maps to external threats mitigation
+MAP076,NIST_800_53_R5,SC-8,SOC2_TSC_2017,CC6.7,equivalent,Transmission protection maps to information transmission
+MAP077,NIST_800_53_R5,SC-12,SOC2_TSC_2017,CC6.1,related,Cryptographic key management supports logical access
+MAP078,NIST_800_53_R5,SC-13,SOC2_TSC_2017,CC6.1,related,Cryptographic protection supports logical access
+MAP079,NIST_800_53_R5,SC-28,SOC2_TSC_2017,C1.1,equivalent,Protection of info at rest maps to confidentiality
+MAP080,NIST_800_53_R5,SI-2,SOC2_TSC_2017,CC7.1,equivalent,Flaw remediation maps to system configuration
+MAP081,NIST_800_53_R5,SI-3,SOC2_TSC_2017,CC6.8,equivalent,Malicious code protection maps to malicious software prevention
+MAP082,NIST_800_53_R5,SI-4,SOC2_TSC_2017,CC7.2,equivalent,System monitoring maps to security monitoring
+MAP083,NIST_800_53_R5,SI-5,SOC2_TSC_2017,CC7.2,related,Security alerts supports security monitoring
+MAP084,NIST_800_53_R5,SR-2,SOC2_TSC_2017,CC9.2,equivalent,Supply chain risk management maps to vendor risk
+MAP085,NIST_800_53_R5,SR-3,SOC2_TSC_2017,CC9.2,related,Supply chain controls supports vendor risk
+MAP086,NIST_800_53_R5,AC-14,SOC2_TSC_2017,CC6.1,related,Permitted actions maps to logical access
+MAP087,NIST_800_53_R5,PM-1,SOC2_TSC_2017,CC1.1,equivalent,Security program plan maps to integrity and ethical values
+MAP088,NIST_800_53_R5,PM-2,SOC2_TSC_2017,CC1.3,equivalent,Security leadership maps to management structures
+MAP089,NIST_800_53_R5,PM-6,SOC2_TSC_2017,CC4.1,related,Performance measures supports ongoing evaluations
+MAP090,NIST_800_53_R5,CA-3,SOC2_TSC_2017,CC6.6,related,Information exchange supports external threats
+MAP091,NIST_800_53_R5,AU-4,SOC2_TSC_2017,CC7.2,related,Audit storage supports security monitoring
+MAP092,NIST_800_53_R5,AU-5,SOC2_TSC_2017,CC7.2,related,Audit failure response supports security monitoring
+MAP093,NIST_800_53_R5,CP-3,SOC2_TSC_2017,A1.3,related,Contingency training supports recovery testing
+MAP094,NIST_800_53_R5,CP-6,SOC2_TSC_2017,A1.2,equivalent,Alternate storage maps to recovery controls
+MAP095,NIST_800_53_R5,CP-7,SOC2_TSC_2017,A1.2,equivalent,Alternate processing maps to recovery controls
+MAP096,NIST_800_53_R5,IR-2,SOC2_TSC_2017,CC7.4,related,IR training supports incident response
+MAP097,NIST_800_53_R5,IR-3,SOC2_TSC_2017,CC7.4,related,IR testing supports incident response
+MAP098,NIST_800_53_R5,IR-7,SOC2_TSC_2017,CC7.4,related,IR assistance supports incident response
+MAP099,NIST_800_53_R5,PE-12,SOC2_TSC_2017,A1.2,related,Emergency lighting supports recovery controls
+MAP100,NIST_800_53_R5,PE-13,SOC2_TSC_2017,A1.2,related,Fire protection supports recovery controls

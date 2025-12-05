@@ -1,0 +1,1087 @@
+{
+  "datasets": [
+    {
+      "name": "audit_readiness",
+      "displayName": "Audit Readiness Metrics",
+      "queryLines": [
+        "SELECT * FROM `grc_compliance_dev`.`03_gold`.audit_readiness_metrics"
+      ]
+    },
+    {
+      "name": "compliance_by_family",
+      "displayName": "Compliance by Control Family",
+      "queryLines": [
+        "SELECT\n",
+        "  control_family_code,\n",
+        "  total_assessments,\n",
+        "  implemented_count,\n",
+        "  partial_count,\n",
+        "  not_implemented_count,\n",
+        "  compliance_percentage\n",
+        "FROM `grc_compliance_dev`.`03_gold`.control_compliance_summary\n",
+        "ORDER BY compliance_percentage ASC"
+      ]
+    },
+    {
+      "name": "system_scorecard",
+      "displayName": "System Compliance Scorecard",
+      "queryLines": [
+        "SELECT\n",
+        "  system_name,\n",
+        "  business_unit,\n",
+        "  criticality,\n",
+        "  compliance_percentage,\n",
+        "  compliance_status,\n",
+        "  total_controls_assessed,\n",
+        "  overdue_remediation_count,\n",
+        "  controls_with_evidence\n",
+        "FROM `grc_compliance_dev`.`03_gold`.system_compliance_scorecard\n",
+        "WHERE in_soc2_scope = true OR in_iso_scope = true\n",
+        "ORDER BY compliance_percentage ASC"
+      ]
+    },
+    {
+      "name": "implementation_status",
+      "displayName": "Implementation Status Distribution",
+      "queryLines": [
+        "SELECT\n",
+        "  implementation_status,\n",
+        "  COUNT(*) as count\n",
+        "FROM `grc_compliance_dev`.`02_silver`.assessments\n",
+        "GROUP BY implementation_status"
+      ]
+    },
+    {
+      "name": "framework_mapping",
+      "displayName": "Cross-Framework Mapping",
+      "queryLines": [
+        "SELECT\n",
+        "  nist_family_code,\n",
+        "  COUNT(*) as total_controls,\n",
+        "  SUM(CASE WHEN soc2_tsc_id IS NOT NULL THEN 1 ELSE 0 END) as mapped_to_soc2,\n",
+        "  AVG(avg_compliance_pct) as avg_compliance\n",
+        "FROM `grc_compliance_dev`.`03_gold`.cross_framework_mapping\n",
+        "GROUP BY nist_family_code\n",
+        "ORDER BY nist_family_code"
+      ]
+    },
+    {
+      "name": "evidence_status",
+      "displayName": "Evidence Status",
+      "queryLines": [
+        "SELECT\n",
+        "  status,\n",
+        "  COUNT(*) as count\n",
+        "FROM `grc_compliance_dev`.`02_silver`.evidence\n",
+        "GROUP BY status"
+      ]
+    },
+    {
+      "name": "evidence_gaps",
+      "displayName": "Evidence Gap Analysis",
+      "queryLines": [
+        "SELECT\n",
+        "  gap_severity,\n",
+        "  COUNT(*) as count\n",
+        "FROM `grc_compliance_dev`.`03_gold`.evidence_gap_analysis\n",
+        "GROUP BY gap_severity"
+      ]
+    },
+    {
+      "name": "overdue_remediation",
+      "displayName": "Remediation Queue",
+      "queryLines": [
+        "SELECT\n",
+        "  a.control_family_code,\n",
+        "  s.system_name,\n",
+        "  a.control_id,\n",
+        "  a.implementation_status,\n",
+        "  a.remediation_due_date,\n",
+        "  a.remediation_owner,\n",
+        "  a.days_to_remediation,\n",
+        "  CASE WHEN a.is_overdue THEN 'Overdue' ELSE 'Upcoming' END as status\n",
+        "FROM `grc_compliance_dev`.`02_silver`.assessments a\n",
+        "JOIN `grc_compliance_dev`.`02_silver`.systems s ON a.system_id = s.system_id\n",
+        "WHERE a.implementation_status != 'Implemented' AND a.implementation_status != 'Not Applicable'\n",
+        "ORDER BY a.remediation_due_date ASC\n",
+        "LIMIT 20"
+      ]
+    },
+    {
+      "name": "compliance_by_business_unit",
+      "displayName": "Compliance by Business Unit",
+      "queryLines": [
+        "SELECT\n",
+        "  business_unit,\n",
+        "  AVG(compliance_percentage) as avg_compliance,\n",
+        "  COUNT(*) as system_count\n",
+        "FROM `grc_compliance_dev`.`03_gold`.system_compliance_scorecard\n",
+        "GROUP BY business_unit\n",
+        "ORDER BY avg_compliance DESC"
+      ]
+    },
+    {
+      "name": "criticality_distribution",
+      "displayName": "Criticality Distribution",
+      "queryLines": [
+        "SELECT\n",
+        "  criticality,\n",
+        "  COUNT(*) as count\n",
+        "FROM `grc_compliance_dev`.`03_gold`.system_compliance_scorecard\n",
+        "GROUP BY criticality"
+      ]
+    },
+    {
+      "name": "compliance_status_overview",
+      "displayName": "Compliance Status Overview",
+      "queryLines": [
+        "SELECT\n",
+        "  compliance_status,\n",
+        "  COUNT(*) as count\n",
+        "FROM `grc_compliance_dev`.`03_gold`.system_compliance_scorecard\n",
+        "GROUP BY compliance_status"
+      ]
+    },
+    {
+      "name": "systems_by_status",
+      "displayName": "Systems by Compliance Status",
+      "queryLines": [
+        "SELECT\n",
+        "  compliance_status,\n",
+        "  criticality,\n",
+        "  COUNT(*) as system_count\n",
+        "FROM `grc_compliance_dev`.`03_gold`.system_compliance_scorecard\n",
+        "WHERE in_soc2_scope = true OR in_iso_scope = true\n",
+        "GROUP BY compliance_status, criticality"
+      ]
+    },
+    {
+      "name": "controls_assessed",
+      "displayName": "Controls Assessed Count",
+      "queryLines": [
+        "SELECT COUNT(DISTINCT control_id) as unique_controls FROM `grc_compliance_dev`.`02_silver`.assessments"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "executive_trust_center",
+      "displayName": "Executive Trust Center",
+      "layout": [
+        {
+          "widget": {
+            "name": "title_widget",
+            "multilineTextboxSpec": {
+              "lines": [
+                "# GRC Compliance Trust Center\n",
+                "## Executive Dashboard - NIST 800-53 & SOC2"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 4,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "readiness_score",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "audit_readiness",
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 0,
+              "viz_spec": {
+                "display_name": "",
+                "description": "",
+                "viz_type": "COUNTER",
+                "serialized_options": "{\"counterLabel\": \"Audit Readiness Score\", \"counterColName\": \"audit_readiness_score\", \"rowNumber\": 1, \"targetRowNumber\": 1, \"stringDecimal\": 1, \"stringDecChar\": \".\", \"stringThouSep\": \",\", \"tooltipFormat\": \"0,0.0\", \"condensed\": true, \"withRowNumber\": true}",
+                "query_name": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "compliance_pct",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "audit_readiness",
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 0,
+              "viz_spec": {
+                "display_name": "",
+                "description": "",
+                "viz_type": "COUNTER",
+                "serialized_options": "{\"counterLabel\": \"Overall Compliance %\", \"counterColName\": \"overall_compliance_pct\", \"rowNumber\": 1, \"targetRowNumber\": 1, \"stringDecimal\": 1, \"stringDecChar\": \".\", \"stringThouSep\": \",\", \"tooltipFormat\": \"0,0.0\", \"condensed\": true, \"withRowNumber\": true}",
+                "query_name": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 2,
+            "y": 1,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "evidence_coverage",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "audit_readiness",
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 0,
+              "viz_spec": {
+                "display_name": "",
+                "description": "",
+                "viz_type": "COUNTER",
+                "serialized_options": "{\"counterLabel\": \"Evidence Coverage %\", \"counterColName\": \"evidence_coverage_pct\", \"rowNumber\": 1, \"targetRowNumber\": 1, \"stringDecimal\": 1, \"stringDecChar\": \".\", \"stringThouSep\": \",\", \"tooltipFormat\": \"0,0.0\", \"condensed\": true, \"withRowNumber\": true}",
+                "query_name": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 1,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "implementation_pie",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "implementation_status",
+                  "fields": [
+                    {
+                      "name": "implementation_status",
+                      "expression": "`implementation_status`"
+                    },
+                    {
+                      "name": "count",
+                      "expression": "`count`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "count",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Count"
+                },
+                "color": {
+                  "fieldName": "implementation_status",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Implemented",
+                        "color": "#1acc92"
+                      },
+                      {
+                        "value": "Partially Implemented",
+                        "color": "#FFF380"
+                      },
+                      {
+                        "value": "Not Implemented",
+                        "color": "#E92828"
+                      },
+                      {
+                        "value": "Not Applicable",
+                        "color": "#919191"
+                      }
+                    ]
+                  },
+                  "displayName": "Status"
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "title": "Implementation Status Distribution",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 3,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "compliance_by_family_bar",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "compliance_by_family",
+                  "fields": [
+                    {
+                      "name": "control_family_code",
+                      "expression": "`control_family_code`"
+                    },
+                    {
+                      "name": "implemented_count",
+                      "expression": "`implemented_count`"
+                    },
+                    {
+                      "name": "partial_count",
+                      "expression": "`partial_count`"
+                    },
+                    {
+                      "name": "not_implemented_count",
+                      "expression": "`not_implemented_count`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "implemented_count",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "axis": {
+                    "title": "Control Count"
+                  },
+                  "displayName": "Count"
+                },
+                "y": {
+                  "fieldName": "control_family_code",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "axis": {
+                    "title": "NIST Control Family"
+                  },
+                  "displayName": "Control Family"
+                }
+              },
+              "frame": {
+                "title": "Compliance by NIST Control Family",
+                "showTitle": true
+              },
+              "mark": {
+                "layout": "stack",
+                "colors": [
+                  "#1acc92",
+                  "#FFF380",
+                  "#E92828"
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 3,
+            "width": 3,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "systems_status_bar",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "systems_by_status",
+                  "fields": [
+                    {
+                      "name": "compliance_status",
+                      "expression": "`compliance_status`"
+                    },
+                    {
+                      "name": "criticality",
+                      "expression": "`criticality`"
+                    },
+                    {
+                      "name": "system_count",
+                      "expression": "`system_count`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "system_count",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "axis": {
+                    "title": "System Count"
+                  },
+                  "displayName": "Count"
+                },
+                "y": {
+                  "fieldName": "compliance_status",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Compliance Status"
+                },
+                "color": {
+                  "fieldName": "criticality",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Critical",
+                        "color": "#E92828"
+                      },
+                      {
+                        "value": "High",
+                        "color": "#FB8D3D"
+                      },
+                      {
+                        "value": "Medium",
+                        "color": "#FFF380"
+                      },
+                      {
+                        "value": "Low",
+                        "color": "#1acc92"
+                      }
+                    ]
+                  },
+                  "displayName": "Criticality"
+                }
+              },
+              "frame": {
+                "title": "Systems by Compliance Status & Criticality",
+                "showTitle": true
+              },
+              "mark": {
+                "layout": "stack"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 3,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "evidence_status_pie",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "evidence_status",
+                  "fields": [
+                    {
+                      "name": "status",
+                      "expression": "`status`"
+                    },
+                    {
+                      "name": "count",
+                      "expression": "`count`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "count",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Count"
+                },
+                "color": {
+                  "fieldName": "status",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Accepted",
+                        "color": "#1acc92"
+                      },
+                      {
+                        "value": "Pending Review",
+                        "color": "#FFF380"
+                      },
+                      {
+                        "value": "Rejected",
+                        "color": "#E92828"
+                      },
+                      {
+                        "value": "Expired",
+                        "color": "#919191"
+                      }
+                    ]
+                  },
+                  "displayName": "Status"
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "title": "Evidence Status Distribution",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 8,
+            "width": 3,
+            "height": 5
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "system_details",
+      "displayName": "System Compliance Details",
+      "layout": [
+        {
+          "widget": {
+            "name": "compliance_by_bu_bar",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "compliance_by_business_unit",
+                  "fields": [
+                    {"name": "business_unit", "expression": "`business_unit`"},
+                    {"name": "avg_compliance", "expression": "`avg_compliance`"}
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "business_unit",
+                  "scale": {"type": "categorical"},
+                  "displayName": "Business Unit"
+                },
+                "y": {
+                  "fieldName": "avg_compliance",
+                  "scale": {"type": "quantitative"},
+                  "axis": {"title": "Avg Compliance %"},
+                  "displayName": "Compliance %"
+                }
+              },
+              "frame": {"title": "Compliance by Business Unit", "showTitle": true},
+              "mark": {"colors": ["#077A9D"]}
+            }
+          },
+          "position": {"x": 0, "y": 0, "width": 3, "height": 4}
+        },
+        {
+          "widget": {
+            "name": "criticality_pie",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "criticality_distribution",
+                  "fields": [
+                    {"name": "criticality", "expression": "`criticality`"},
+                    {"name": "count", "expression": "`count`"}
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {"fieldName": "count", "scale": {"type": "quantitative"}, "displayName": "Count"},
+                "color": {
+                  "fieldName": "criticality",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {"value": "Critical", "color": "#E92828"},
+                      {"value": "High", "color": "#FB8D3D"},
+                      {"value": "Medium", "color": "#FFF380"},
+                      {"value": "Low", "color": "#1acc92"}
+                    ]
+                  },
+                  "displayName": "Criticality"
+                },
+                "label": {"show": true}
+              },
+              "frame": {"title": "Systems by Criticality", "showTitle": true}
+            }
+          },
+          "position": {"x": 3, "y": 0, "width": 3, "height": 4}
+        },
+        {
+          "widget": {
+            "name": "system_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "system_scorecard",
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {"fieldName": "system_name", "displayName": "System Name"},
+                  {"fieldName": "business_unit", "displayName": "Business Unit"},
+                  {"fieldName": "criticality", "displayName": "Criticality"},
+                  {"fieldName": "compliance_percentage", "displayName": "Compliance %"},
+                  {"fieldName": "compliance_status", "displayName": "Status"},
+                  {"fieldName": "overdue_remediation_count", "displayName": "Overdue"}
+                ]
+              },
+              "frame": {"title": "System Compliance Scorecard", "showTitle": true}
+            }
+          },
+          "position": {"x": 0, "y": 4, "width": 6, "height": 6}
+        },
+        {
+          "widget": {
+            "name": "overdue_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "overdue_remediation",
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {"fieldName": "system_name", "displayName": "System"},
+                  {"fieldName": "control_id", "displayName": "Control ID"},
+                  {"fieldName": "implementation_status", "displayName": "Impl Status"},
+                  {"fieldName": "remediation_due_date", "displayName": "Due Date"},
+                  {"fieldName": "status", "displayName": "Status"}
+                ]
+              },
+              "frame": {"title": "Remediation Queue", "showTitle": true}
+            }
+          },
+          "position": {"x": 0, "y": 10, "width": 6, "height": 5}
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "framework_mapping",
+      "displayName": "Cross-Framework Mapping",
+      "layout": [
+        {
+          "widget": {
+            "name": "mapping_title",
+            "multilineTextboxSpec": {
+              "lines": [
+                "# Cross-Framework Control Mapping\n",
+                "## NIST 800-53 to SOC2 Trust Service Criteria"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "mapping_bar",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "framework_mapping",
+                  "fields": [
+                    {
+                      "name": "nist_family_code",
+                      "expression": "`nist_family_code`"
+                    },
+                    {
+                      "name": "total_controls",
+                      "expression": "`total_controls`"
+                    },
+                    {
+                      "name": "mapped_to_soc2",
+                      "expression": "`mapped_to_soc2`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "nist_family_code",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "axis": {
+                    "title": "NIST Control Family"
+                  },
+                  "displayName": "Family"
+                },
+                "y": {
+                  "fieldName": "mapped_to_soc2",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "axis": {
+                    "title": "Controls Mapped to SOC2"
+                  },
+                  "displayName": "Mapped Controls"
+                }
+              },
+              "frame": {
+                "title": "NIST to SOC2 Mapping Coverage by Family",
+                "showTitle": true
+              },
+              "mark": {
+                "colors": [
+                  "#077A9D"
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "mapping_compliance_bar",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "framework_mapping",
+                  "fields": [
+                    {
+                      "name": "nist_family_code",
+                      "expression": "`nist_family_code`"
+                    },
+                    {
+                      "name": "avg_compliance",
+                      "expression": "`avg_compliance`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "nist_family_code",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Family"
+                },
+                "y": {
+                  "fieldName": "avg_compliance",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "axis": {
+                    "title": "Average Compliance %"
+                  },
+                  "displayName": "Compliance %"
+                }
+              },
+              "frame": {
+                "title": "Average Compliance by NIST Family",
+                "showTitle": true
+              },
+              "mark": {
+                "colors": [
+                  "#1acc92"
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 7,
+            "width": 6,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "evidence_tracking",
+      "displayName": "Evidence Tracking",
+      "layout": [
+        {
+          "widget": {
+            "name": "evidence_title",
+            "multilineTextboxSpec": {
+              "lines": [
+                "# Evidence Tracking & Gap Analysis\n",
+                "## Monitor evidence collection for audit readiness"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "gap_severity_bar",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "evidence_gaps",
+                  "fields": [
+                    {
+                      "name": "gap_severity",
+                      "expression": "`gap_severity`"
+                    },
+                    {
+                      "name": "count",
+                      "expression": "`count`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "gap_severity",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Gap Severity"
+                },
+                "y": {
+                  "fieldName": "count",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "axis": {
+                    "title": "Control Count"
+                  },
+                  "displayName": "Count"
+                },
+                "color": {
+                  "fieldName": "gap_severity",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Critical",
+                        "color": "#E92828"
+                      },
+                      {
+                        "value": "High",
+                        "color": "#FB8D3D"
+                      },
+                      {
+                        "value": "Medium",
+                        "color": "#FFF380"
+                      },
+                      {
+                        "value": "Low",
+                        "color": "#1acc92"
+                      }
+                    ]
+                  },
+                  "displayName": "Severity"
+                }
+              },
+              "frame": {
+                "title": "Evidence Gaps by Severity",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "evidence_status_detail",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "evidence_status",
+                  "fields": [
+                    {
+                      "name": "status",
+                      "expression": "`status`"
+                    },
+                    {
+                      "name": "count",
+                      "expression": "`count`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "status",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Status"
+                },
+                "y": {
+                  "fieldName": "count",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Count"
+                },
+                "color": {
+                  "fieldName": "status",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Accepted",
+                        "color": "#1acc92"
+                      },
+                      {
+                        "value": "Pending Review",
+                        "color": "#FFF380"
+                      },
+                      {
+                        "value": "Rejected",
+                        "color": "#E92828"
+                      },
+                      {
+                        "value": "Expired",
+                        "color": "#919191"
+                      }
+                    ]
+                  },
+                  "displayName": "Status"
+                }
+              },
+              "frame": {
+                "title": "Evidence Review Status",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 1,
+            "width": 3,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    }
+  }
+}

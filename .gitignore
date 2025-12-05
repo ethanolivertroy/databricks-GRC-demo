@@ -1,0 +1,18 @@
+# OS files
+.DS_Store
+*.swp
+
+# Context files (job descriptions, transcripts, reference project, notes)
+_context/
+
+# Python
+__pycache__/
+*.pyc
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Claude settings
+.claude/

@@ -173,6 +173,26 @@ Business-ready aggregations and metrics.
 | Dashboard | Databricks SQL Dashboards |
 | Version Control | Git/GitHub |
 
+## Data Lineage
+
+```
+LANDING              BRONZE                  SILVER              GOLD                    ML OUTPUT
+(Volumes)            (Raw Tables)            (Cleaned)           (Aggregated)            (Predictions)
+───────────────────────────────────────────────────────────────────────────────────────────────────────
+
+frameworks/    ───>  nist_800_53_controls ─> nist_controls ──┬──> compliance_summary
+                     soc2_trust_criteria  ─> soc2_criteria  ─┤
+                     control_mapping      ───────────────────┼──> cross_framework_mapping
+                                                             │
+systems/       ───>  systems_inventory    ─> systems ────────┼──> system_scorecard
+                                                             │
+assessments/   ───>  control_assessments  ─> assessments ────┼──> audit_readiness
+                                                             │    compliance_alerts ◄── Rule Engine
+evidence/      ───>  evidence_records     ─> evidence ───────┼──> evidence_gap_analysis
+                                                             │
+                                                             └──> risk_predictions  ◄── ML Model
+```
+
 ## Security & Governance
 
 - Unity Catalog provides data governance

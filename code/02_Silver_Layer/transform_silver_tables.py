@@ -15,9 +15,30 @@ from pyspark.sql.functions import (
     lit
 )
 
-CATALOG = "grc_compliance_dev"
-BRONZE = "01_bronze"
-SILVER = "02_silver"
+import sys
+
+try:
+    notebook_path = (
+        dbutils.notebook.entry_point.getDbutils()
+        .notebook()
+        .getContext()
+        .notebookPath()
+        .get()
+    )
+    repo_root = "/Workspace" + "/".join(notebook_path.split("/")[:-2])
+    code_path = f"{repo_root}/code"
+    if code_path not in sys.path:
+        sys.path.insert(0, code_path)
+except Exception:
+    pass
+
+from utils.bootstrap import ensure_code_on_path
+
+ensure_code_on_path(dbutils=dbutils)
+from utils.config import CATALOG, BRONZE_SCHEMA, SILVER_SCHEMA, STATUS_SCORES, VALID_IMPLEMENTATION_STATUS
+
+BRONZE = BRONZE_SCHEMA
+SILVER = SILVER_SCHEMA
 
 spark.sql(f"USE CATALOG {CATALOG}")
 
@@ -130,16 +151,25 @@ df_assessments_silver = (
         when(col("remediation_due_date").isNotNull(),
             datediff(col("remediation_due_date"), current_date())
         ).otherwise(None))
-    .withColumn("compliance_score",
-        when(col("implementation_status") == "Implemented", 100)
-        .when(col("implementation_status") == "Partially Implemented", 50)
-        .when(col("implementation_status") == "Not Applicable", lit(None).cast("int"))
-        .otherwise(0))
+    .withColumn(
+        "compliance_score",
+        when(col("implementation_status") == "Implemented", STATUS_SCORES["Implemented"])
+        .when(
+            col("implementation_status") == "Partially Implemented",
+            STATUS_SCORES["Partially Implemented"],
+        )
+        .when(
+            col("implementation_status") == "Not Applicable",
+            lit(STATUS_SCORES["Not Applicable"]).cast("int"),
+        )
+        .otherwise(STATUS_SCORES["Not Implemented"]),
+    )
 )
 
 # Data quality check
-valid_statuses = ["Implemented", "Partially Implemented", "Not Implemented", "Not Applicable"]
-invalid_status = df_assessments_silver.filter(~col("implementation_status").isin(valid_statuses)).count()
+invalid_status = df_assessments_silver.filter(
+    ~col("implementation_status").isin(VALID_IMPLEMENTATION_STATUS)
+).count()
 print(f"Invalid implementation statuses: {invalid_status}")
 
 df_assessments_silver.write.mode("overwrite").saveAsTable(f"{CATALOG}.{SILVER}.assessments")

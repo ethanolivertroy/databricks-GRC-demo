@@ -1,0 +1,37 @@
+control_id,control_name,control_domain,control_objective,implementation_guidance
+A.5.1,Policies for information security,Information security policies,Management direction for information security shall be established,Develop and maintain information security policies approved by management
+A.5.2,Review of the policies for information security,Information security policies,Policies shall be reviewed at planned intervals,Review policies at least annually or when significant changes occur
+A.6.1,Internal organization,Organization of information security,Management shall support security through clear direction and commitment,Establish roles and responsibilities for information security
+A.6.2,Mobile devices and teleworking,Organization of information security,Security shall address mobile computing and teleworking,Implement mobile device management and secure remote access
+A.7.1,Prior to employment,Human resource security,Background verification checks on candidates shall be carried out,Conduct background checks proportional to risk assessment
+A.7.2,During employment,Human resource security,Employees shall be aware of information security responsibilities,Provide security awareness training and enforce acceptable use
+A.7.3,Termination and change of employment,Human resource security,Security responsibilities that remain valid after termination shall be defined,Define post-employment confidentiality obligations
+A.8.1,Responsibility for assets,Asset management,Assets shall be identified and inventory maintained,Maintain asset inventory with ownership assigned
+A.8.2,Information classification,Asset management,Information shall be classified in terms of legal requirements and value,Implement data classification scheme aligned with business needs
+A.8.3,Media handling,Asset management,Procedures for handling of removable media shall be implemented,Control physical media through labeling disposal and transport procedures
+A.9.1,Business requirements of access control,Access control,Access control policy shall be established based on business requirements,Define and document access control requirements
+A.9.2,User access management,Access control,Formal user registration and de-registration process shall be implemented,Implement identity lifecycle management processes
+A.9.3,User responsibilities,Access control,Users shall be required to follow practices in the use of authentication,Enforce strong authentication and account protection
+A.9.4,System and application access control,Access control,Access to systems and applications shall be controlled,Implement logical access controls and session management
+A.10.1,Cryptographic controls,Cryptography,Policy on the use of cryptographic controls shall be developed,Define cryptographic standards for data protection
+A.11.1,Secure areas,Physical and environmental security,Physical security perimeters shall be defined and used,Implement physical access controls and perimeter security
+A.11.2,Equipment,Physical and environmental security,Equipment shall be protected to reduce threats from environmental hazards,Protect equipment from environmental threats and unauthorized access
+A.12.1,Operational procedures and responsibilities,Operations security,Operating procedures shall be documented and made available,Document and maintain operational procedures
+A.12.2,Protection from malware,Operations security,Detection prevention and recovery controls shall be implemented,Deploy anti-malware controls across all systems
+A.12.3,Backup,Operations security,Backup copies of information and software shall be taken and tested,Implement backup procedures with regular testing
+A.12.4,Logging and monitoring,Operations security,Event logs shall be produced and regularly reviewed,Implement centralized logging and security monitoring
+A.12.5,Control of operational software,Operations security,Procedures shall be implemented to control installation of software,Control software installation through change management
+A.12.6,Technical vulnerability management,Operations security,Information about technical vulnerabilities shall be obtained and evaluated,Implement vulnerability management program
+A.12.7,Information systems audit considerations,Operations security,Audit requirements shall be carefully planned,Plan system audits to minimize business impact
+A.13.1,Network security management,Communications security,Networks shall be managed and controlled to protect information,Implement network segmentation and security controls
+A.13.2,Information transfer,Communications security,Policies and procedures shall protect information in transit,Secure information transfer through encryption and controls
+A.14.1,Security requirements of information systems,System acquisition development and maintenance,Security requirements shall be included in requirements for new systems,Include security requirements in system specifications
+A.14.2,Security in development and support processes,System acquisition development and maintenance,Secure development policy shall be established,Implement secure SDLC practices
+A.14.3,Test data,System acquisition development and maintenance,Test data shall be selected carefully and protected,Use sanitized or synthetic test data
+A.15.1,Information security in supplier relationships,Supplier relationships,Information security requirements for mitigating risks shall be agreed,Assess and manage supplier security risks
+A.15.2,Supplier service delivery management,Supplier relationships,Supplier service delivery shall be monitored reviewed and audited,Monitor supplier security performance
+A.16.1,Management of information security incidents and improvements,Information security incident management,Consistent and effective approach to management of incidents shall be implemented,Establish incident response procedures
+A.17.1,Information security continuity,Information security aspects of business continuity management,Information security continuity shall be embedded in BCM systems,Include security in business continuity planning
+A.17.2,Redundancies,Information security aspects of business continuity management,Information processing facilities shall be implemented with redundancy,Implement redundancy for critical systems
+A.18.1,Compliance with legal and contractual requirements,Compliance,All relevant requirements shall be identified and documented,Identify and document legal and regulatory requirements
+A.18.2,Information security reviews,Compliance,Independent review of information security shall be conducted,Conduct periodic security assessments and audits

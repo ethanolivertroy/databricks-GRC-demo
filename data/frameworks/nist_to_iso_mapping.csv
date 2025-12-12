@@ -1,0 +1,139 @@
+nist_control_id,nist_control_family,iso_control_id,iso_control_domain,mapping_rationale
+AC-1,Access Control,A.9.1,Access control,Both address access control policy requirements
+AC-2,Access Control,A.9.2,Access control,Account management maps to user access management
+AC-3,Access Control,A.9.4,Access control,Access enforcement maps to system access control
+AC-4,Access Control,A.13.1,Communications security,Information flow control maps to network security
+AC-5,Access Control,A.9.2,Access control,Separation of duties maps to user access management
+AC-6,Access Control,A.9.1,Access control,Least privilege maps to access control policy
+AC-7,Access Control,A.9.4,Access control,Unsuccessful login attempts maps to access control
+AC-8,Access Control,A.9.4,Access control,System use notification maps to access control
+AC-11,Access Control,A.9.4,Access control,Session lock maps to system access control
+AC-12,Access Control,A.9.4,Access control,Session termination maps to system access control
+AC-14,Access Control,A.9.4,Access control,Permitted actions maps to system access control
+AC-17,Access Control,A.6.2,Organization of information security,Remote access maps to mobile devices and teleworking
+AC-18,Access Control,A.13.1,Communications security,Wireless access maps to network security
+AC-19,Access Control,A.6.2,Organization of information security,Mobile devices maps to mobile devices and teleworking
+AC-20,Access Control,A.13.2,Communications security,External systems maps to information transfer
+AC-21,Access Control,A.8.2,Asset management,Information sharing maps to information classification
+AC-22,Access Control,A.13.2,Communications security,Publicly accessible content maps to information transfer
+AT-1,Awareness and Training,A.7.2,Human resource security,Policy and procedures maps to during employment
+AT-2,Awareness and Training,A.7.2,Human resource security,Awareness training maps to during employment
+AT-3,Awareness and Training,A.7.2,Human resource security,Role-based training maps to during employment
+AT-4,Awareness and Training,A.7.2,Human resource security,Training records maps to during employment
+AU-1,Audit and Accountability,A.12.4,Operations security,Policy and procedures maps to logging and monitoring
+AU-2,Audit and Accountability,A.12.4,Operations security,Audit events maps to logging and monitoring
+AU-3,Audit and Accountability,A.12.4,Operations security,Content of audit records maps to logging and monitoring
+AU-4,Audit and Accountability,A.12.4,Operations security,Audit storage capacity maps to logging and monitoring
+AU-5,Audit and Accountability,A.12.4,Operations security,Response to audit failures maps to logging and monitoring
+AU-6,Audit and Accountability,A.12.4,Operations security,Audit review maps to logging and monitoring
+AU-7,Audit and Accountability,A.12.4,Operations security,Audit reduction maps to logging and monitoring
+AU-8,Audit and Accountability,A.12.4,Operations security,Time stamps maps to logging and monitoring
+AU-9,Audit and Accountability,A.12.4,Operations security,Protection of audit info maps to logging and monitoring
+AU-11,Audit and Accountability,A.12.4,Operations security,Audit record retention maps to logging and monitoring
+AU-12,Audit and Accountability,A.12.4,Operations security,Audit generation maps to logging and monitoring
+CA-1,Security Assessment,A.18.2,Compliance,Policy maps to information security reviews
+CA-2,Security Assessment,A.18.2,Compliance,Security assessments maps to information security reviews
+CA-3,Security Assessment,A.15.1,Supplier relationships,System interconnections maps to supplier relationships
+CA-5,Security Assessment,A.18.2,Compliance,Plan of action maps to information security reviews
+CA-6,Security Assessment,A.18.2,Compliance,Authorization maps to information security reviews
+CA-7,Security Assessment,A.18.2,Compliance,Continuous monitoring maps to information security reviews
+CA-8,Security Assessment,A.18.2,Compliance,Penetration testing maps to information security reviews
+CA-9,Security Assessment,A.13.1,Communications security,Internal connections maps to network security
+CM-1,Configuration Management,A.12.1,Operations security,Policy maps to operational procedures
+CM-2,Configuration Management,A.12.5,Operations security,Baseline configuration maps to operational software
+CM-3,Configuration Management,A.12.5,Operations security,Configuration change control maps to operational software
+CM-4,Configuration Management,A.14.2,System acquisition,Security impact analysis maps to secure development
+CM-5,Configuration Management,A.12.5,Operations security,Access restrictions maps to operational software
+CM-6,Configuration Management,A.12.5,Operations security,Configuration settings maps to operational software
+CM-7,Configuration Management,A.12.5,Operations security,Least functionality maps to operational software
+CM-8,Configuration Management,A.8.1,Asset management,System component inventory maps to asset inventory
+CM-9,Configuration Management,A.12.1,Operations security,Configuration management plan maps to operational procedures
+CM-10,Configuration Management,A.12.5,Operations security,Software usage restrictions maps to operational software
+CM-11,Configuration Management,A.12.5,Operations security,User-installed software maps to operational software
+CP-1,Contingency Planning,A.17.1,Information security continuity,Policy maps to business continuity
+CP-2,Contingency Planning,A.17.1,Information security continuity,Contingency plan maps to business continuity
+CP-3,Contingency Planning,A.17.1,Information security continuity,Contingency training maps to business continuity
+CP-4,Contingency Planning,A.17.1,Information security continuity,Contingency plan testing maps to business continuity
+CP-6,Contingency Planning,A.17.2,Information security continuity,Alternate storage site maps to redundancies
+CP-7,Contingency Planning,A.17.2,Information security continuity,Alternate processing site maps to redundancies
+CP-8,Contingency Planning,A.17.2,Information security continuity,Telecom services maps to redundancies
+CP-9,Contingency Planning,A.12.3,Operations security,System backup maps to backup
+CP-10,Contingency Planning,A.17.1,Information security continuity,System recovery maps to business continuity
+IA-1,Identification and Authentication,A.9.2,Access control,Policy maps to user access management
+IA-2,Identification and Authentication,A.9.4,Access control,Identification and authentication maps to system access
+IA-3,Identification and Authentication,A.9.4,Access control,Device identification maps to system access
+IA-4,Identification and Authentication,A.9.2,Access control,Identifier management maps to user access management
+IA-5,Identification and Authentication,A.9.3,Access control,Authenticator management maps to user responsibilities
+IA-6,Identification and Authentication,A.9.4,Access control,Authenticator feedback maps to system access
+IA-7,Identification and Authentication,A.10.1,Cryptography,Cryptographic authentication maps to cryptographic controls
+IA-8,Identification and Authentication,A.9.4,Access control,PIV credentials maps to system access
+IR-1,Incident Response,A.16.1,Information security incident management,Policy maps to incident management
+IR-2,Incident Response,A.16.1,Information security incident management,Incident response training maps to incident management
+IR-3,Incident Response,A.16.1,Information security incident management,Incident response testing maps to incident management
+IR-4,Incident Response,A.16.1,Information security incident management,Incident handling maps to incident management
+IR-5,Incident Response,A.16.1,Information security incident management,Incident monitoring maps to incident management
+IR-6,Incident Response,A.16.1,Information security incident management,Incident reporting maps to incident management
+IR-7,Incident Response,A.16.1,Information security incident management,Incident assistance maps to incident management
+IR-8,Incident Response,A.16.1,Information security incident management,Incident response plan maps to incident management
+MA-1,Maintenance,A.11.2,Physical and environmental security,Policy maps to equipment protection
+MA-2,Maintenance,A.11.2,Physical and environmental security,Controlled maintenance maps to equipment protection
+MA-3,Maintenance,A.11.2,Physical and environmental security,Maintenance tools maps to equipment protection
+MA-4,Maintenance,A.11.2,Physical and environmental security,Nonlocal maintenance maps to equipment protection
+MA-5,Maintenance,A.11.2,Physical and environmental security,Maintenance personnel maps to equipment protection
+MA-6,Maintenance,A.11.2,Physical and environmental security,Timely maintenance maps to equipment protection
+MP-1,Media Protection,A.8.3,Asset management,Policy maps to media handling
+MP-2,Media Protection,A.8.3,Asset management,Media access maps to media handling
+MP-3,Media Protection,A.8.3,Asset management,Media marking maps to media handling
+MP-4,Media Protection,A.8.3,Asset management,Media storage maps to media handling
+MP-5,Media Protection,A.8.3,Asset management,Media transport maps to media handling
+MP-6,Media Protection,A.8.3,Asset management,Media sanitization maps to media handling
+MP-7,Media Protection,A.8.3,Asset management,Media use maps to media handling
+PE-1,Physical and Environmental Protection,A.11.1,Physical and environmental security,Policy maps to secure areas
+PE-2,Physical and Environmental Protection,A.11.1,Physical and environmental security,Physical access auth maps to secure areas
+PE-3,Physical and Environmental Protection,A.11.1,Physical and environmental security,Physical access control maps to secure areas
+PE-4,Physical and Environmental Protection,A.11.1,Physical and environmental security,Access control for transmission maps to secure areas
+PE-5,Physical and Environmental Protection,A.11.1,Physical and environmental security,Access control for output maps to secure areas
+PE-6,Physical and Environmental Protection,A.11.1,Physical and environmental security,Monitoring physical access maps to secure areas
+PE-8,Physical and Environmental Protection,A.11.1,Physical and environmental security,Visitor access records maps to secure areas
+PE-9,Physical and Environmental Protection,A.11.2,Physical and environmental security,Power equipment maps to equipment protection
+PE-10,Physical and Environmental Protection,A.11.2,Physical and environmental security,Emergency shutoff maps to equipment protection
+PE-11,Physical and Environmental Protection,A.11.2,Physical and environmental security,Emergency power maps to equipment protection
+PE-12,Physical and Environmental Protection,A.11.2,Physical and environmental security,Emergency lighting maps to equipment protection
+PE-13,Physical and Environmental Protection,A.11.2,Physical and environmental security,Fire protection maps to equipment protection
+PE-14,Physical and Environmental Protection,A.11.2,Physical and environmental security,Temperature and humidity maps to equipment protection
+PE-15,Physical and Environmental Protection,A.11.2,Physical and environmental security,Water damage protection maps to equipment protection
+PE-16,Physical and Environmental Protection,A.11.2,Physical and environmental security,Delivery and removal maps to equipment protection
+PE-17,Physical and Environmental Protection,A.6.2,Organization of information security,Alternate work site maps to teleworking
+PE-18,Physical and Environmental Protection,A.11.1,Physical and environmental security,Location of components maps to secure areas
+SC-1,System and Communications Protection,A.13.1,Communications security,Policy maps to network security
+SC-2,System and Communications Protection,A.14.1,System acquisition,Application partitioning maps to security requirements
+SC-3,System and Communications Protection,A.14.1,System acquisition,Security function isolation maps to security requirements
+SC-4,System and Communications Protection,A.13.1,Communications security,Information in shared resources maps to network security
+SC-5,System and Communications Protection,A.13.1,Communications security,Denial of service protection maps to network security
+SC-7,System and Communications Protection,A.13.1,Communications security,Boundary protection maps to network security
+SC-8,System and Communications Protection,A.13.2,Communications security,Transmission confidentiality maps to information transfer
+SC-10,System and Communications Protection,A.9.4,Access control,Network disconnect maps to system access
+SC-12,System and Communications Protection,A.10.1,Cryptography,Cryptographic key management maps to cryptographic controls
+SC-13,System and Communications Protection,A.10.1,Cryptography,Cryptographic protection maps to cryptographic controls
+SC-15,System and Communications Protection,A.13.1,Communications security,Collaborative computing maps to network security
+SC-17,System and Communications Protection,A.10.1,Cryptography,PKI certificates maps to cryptographic controls
+SC-18,System and Communications Protection,A.12.2,Operations security,Mobile code maps to protection from malware
+SC-19,System and Communications Protection,A.13.1,Communications security,Voice over IP maps to network security
+SC-20,System and Communications Protection,A.13.1,Communications security,Secure name resolution maps to network security
+SC-21,System and Communications Protection,A.13.1,Communications security,Secure name resolution maps to network security
+SC-22,System and Communications Protection,A.13.1,Communications security,Architecture and provisioning maps to network security
+SC-23,System and Communications Protection,A.9.4,Access control,Session authenticity maps to system access
+SC-28,System and Communications Protection,A.10.1,Cryptography,Protection of information at rest maps to cryptographic controls
+SC-39,System and Communications Protection,A.14.2,System acquisition,Process isolation maps to secure development
+SI-1,System and Information Integrity,A.12.6,Operations security,Policy maps to vulnerability management
+SI-2,System and Information Integrity,A.12.6,Operations security,Flaw remediation maps to vulnerability management
+SI-3,System and Information Integrity,A.12.2,Operations security,Malicious code protection maps to protection from malware
+SI-4,System and Information Integrity,A.12.4,Operations security,System monitoring maps to logging and monitoring
+SI-5,System and Information Integrity,A.12.6,Operations security,Security alerts maps to vulnerability management
+SI-6,System and Information Integrity,A.12.7,Operations security,Security function verification maps to audit considerations
+SI-7,System and Information Integrity,A.14.2,System acquisition,Software integrity maps to secure development
+SI-8,System and Information Integrity,A.13.2,Communications security,Spam protection maps to information transfer
+SI-10,System and Information Integrity,A.14.2,System acquisition,Information input validation maps to secure development
+SI-11,System and Information Integrity,A.14.2,System acquisition,Error handling maps to secure development
+SI-12,System and Information Integrity,A.18.1,Compliance,Information handling maps to legal requirements
+SI-16,System and Information Integrity,A.12.2,Operations security,Memory protection maps to protection from malware

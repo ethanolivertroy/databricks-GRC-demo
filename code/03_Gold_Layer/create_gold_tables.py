@@ -16,10 +16,31 @@ from pyspark.sql.functions import (
     round as spark_round, current_date, lit, coalesce
 )
 
-CATALOG = "grc_compliance_dev"
-SILVER = "02_silver"
-GOLD = "03_gold"
-BRONZE = "01_bronze"
+import sys
+
+try:
+    notebook_path = (
+        dbutils.notebook.entry_point.getDbutils()
+        .notebook()
+        .getContext()
+        .notebookPath()
+        .get()
+    )
+    repo_root = "/Workspace" + "/".join(notebook_path.split("/")[:-2])
+    code_path = f"{repo_root}/code"
+    if code_path not in sys.path:
+        sys.path.insert(0, code_path)
+except Exception:
+    pass
+
+from utils.bootstrap import ensure_code_on_path
+
+ensure_code_on_path(dbutils=dbutils)
+from utils.config import CATALOG, SILVER_SCHEMA, GOLD_SCHEMA, BRONZE_SCHEMA, COMPLIANCE_THRESHOLDS
+
+SILVER = SILVER_SCHEMA
+GOLD = GOLD_SCHEMA
+BRONZE = BRONZE_SCHEMA
 
 spark.sql(f"USE CATALOG {CATALOG}")
 
@@ -121,10 +142,19 @@ df_system_scorecard = (
         col("days_since_assessment"),
         col("assessment_overdue")
     )
-    .withColumn("compliance_status",
-        when(col("compliance_percentage") >= 90, "Compliant")
-        .when(col("compliance_percentage") >= 70, "Partially Compliant")
-        .otherwise("Non-Compliant"))
+    .withColumn(
+        "compliance_status",
+        when(
+            col("compliance_percentage") >= COMPLIANCE_THRESHOLDS["compliant"],
+            "Compliant",
+        )
+        .when(
+            col("compliance_percentage")
+            >= COMPLIANCE_THRESHOLDS["partially_compliant"],
+            "Partially Compliant",
+        )
+        .otherwise("Non-Compliant"),
+    )
     .withColumn("snapshot_date", current_date())
 )
 

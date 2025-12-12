@@ -8,17 +8,44 @@
 
 from pyspark.sql.functions import current_timestamp, lit
 
-CATALOG = "grc_compliance_dev"
-BRONZE = "01_bronze"
-LANDING = "00_landing"
+import sys
+
+try:
+    notebook_path = (
+        dbutils.notebook.entry_point.getDbutils()
+        .notebook()
+        .getContext()
+        .notebookPath()
+        .get()
+    )
+    repo_root = "/Workspace" + "/".join(notebook_path.split("/")[:-2])
+    code_path = f"{repo_root}/code"
+    if code_path not in sys.path:
+        sys.path.insert(0, code_path)
+except Exception:
+    pass
+
+from utils.bootstrap import ensure_code_on_path
+
+ensure_code_on_path(dbutils=dbutils)
+from utils.config import (
+    CATALOG,
+    BRONZE_SCHEMA,
+    FRAMEWORKS_PATH,
+    SYSTEMS_PATH,
+    ASSESSMENTS_PATH,
+    EVIDENCE_PATH,
+)
+
+BRONZE = BRONZE_SCHEMA
 
 spark.sql(f"USE CATALOG {CATALOG}")
 
 # Data paths in Volumes (uploaded via API)
-frameworks_path = f"/Volumes/{CATALOG}/{LANDING}/frameworks"
-systems_path = f"/Volumes/{CATALOG}/{LANDING}/systems"
-assessments_path = f"/Volumes/{CATALOG}/{LANDING}/assessments"
-evidence_path = f"/Volumes/{CATALOG}/{LANDING}/evidence"
+frameworks_path = FRAMEWORKS_PATH
+systems_path = SYSTEMS_PATH
+assessments_path = ASSESSMENTS_PATH
+evidence_path = EVIDENCE_PATH
 
 # COMMAND ----------
 

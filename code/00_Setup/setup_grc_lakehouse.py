@@ -47,29 +47,42 @@
 
 # COMMAND ----------
 
-import os
+import sys
 
-# Get the repo root path (this notebook is in code/00_Setup/)
-notebook_path = dbutils.notebook.entry_point.getDbutils().notebook().getContext().notebookPath().get()
-# Extract the repo root from the notebook path
-repo_root = "/Workspace" + "/".join(notebook_path.split("/")[:-2])  # Go up 2 levels from 00_Setup
+# Ensure `/Workspace/<repo>/code` is importable before using utils.
+try:
+    notebook_path = (
+        dbutils.notebook.entry_point.getDbutils()
+        .notebook()
+        .getContext()
+        .notebookPath()
+        .get()
+    )
+    repo_root = "/Workspace" + "/".join(notebook_path.split("/")[:-2])
+    code_path = f"{repo_root}/code"
+    if code_path not in sys.path:
+        sys.path.insert(0, code_path)
+except Exception:
+    repo_root = "/Workspace"
 
+from utils.bootstrap import ensure_code_on_path
+from utils.config import CATALOG, FRAMEWORKS_PATH, SYSTEMS_PATH, ASSESSMENTS_PATH, EVIDENCE_PATH
+
+# Normalize repo root (handles non-Databricks runs).
+repo_root = ensure_code_on_path(dbutils=dbutils)
 print(f"Repo root: {repo_root}")
 
 # COMMAND ----------
-
-# Define source and destination paths
-CATALOG = "grc_compliance_dev"
 
 # Source paths (from cloned repo in workspace)
 source_frameworks = f"{repo_root}/data/frameworks"
 source_mock = f"{repo_root}/data/mock"
 
 # Destination paths (volumes)
-dest_frameworks = f"/Volumes/{CATALOG}/00_landing/frameworks"
-dest_systems = f"/Volumes/{CATALOG}/00_landing/systems"
-dest_assessments = f"/Volumes/{CATALOG}/00_landing/assessments"
-dest_evidence = f"/Volumes/{CATALOG}/00_landing/evidence"
+dest_frameworks = FRAMEWORKS_PATH
+dest_systems = SYSTEMS_PATH
+dest_assessments = ASSESSMENTS_PATH
+dest_evidence = EVIDENCE_PATH
 
 # COMMAND ----------
 

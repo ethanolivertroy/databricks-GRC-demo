@@ -8,6 +8,85 @@
       ]
     },
     {
+      "name": "risk_predictions",
+      "displayName": "Risk Predictions",
+      "queryLines": [
+        "SELECT\n",
+        "  p.control_id,\n",
+        "  p.system_id,\n",
+        "  s.system_name,\n",
+        "  p.control_family_code,\n",
+        "  ROUND(p.risk_score * 100, 1) as risk_pct,\n",
+        "  p.risk_level,\n",
+        "  p.historical_compliance,\n",
+        "  p.evidence_count\n",
+        "FROM `grc_compliance_dev`.`03_gold`.control_risk_predictions p\n",
+        "JOIN `grc_compliance_dev`.`02_silver`.systems s ON p.system_id = s.system_id\n",
+        "ORDER BY p.risk_score DESC"
+      ]
+    },
+    {
+      "name": "risk_by_level",
+      "displayName": "Risk by Level",
+      "queryLines": [
+        "SELECT\n",
+        "  risk_level,\n",
+        "  COUNT(*) as count,\n",
+        "  ROUND(AVG(risk_score) * 100, 1) as avg_risk_pct\n",
+        "FROM `grc_compliance_dev`.`03_gold`.control_risk_predictions\n",
+        "GROUP BY risk_level"
+      ]
+    },
+    {
+      "name": "risk_by_family",
+      "displayName": "Risk by Control Family",
+      "queryLines": [
+        "SELECT\n",
+        "  control_family_code,\n",
+        "  COUNT(*) as total_controls,\n",
+        "  SUM(CASE WHEN risk_level = 'High' THEN 1 ELSE 0 END) as high_risk,\n",
+        "  SUM(CASE WHEN risk_level = 'Medium' THEN 1 ELSE 0 END) as medium_risk,\n",
+        "  SUM(CASE WHEN risk_level = 'Low' THEN 1 ELSE 0 END) as low_risk,\n",
+        "  ROUND(AVG(risk_score) * 100, 1) as avg_risk_pct\n",
+        "FROM `grc_compliance_dev`.`03_gold`.control_risk_predictions\n",
+        "GROUP BY control_family_code\n",
+        "ORDER BY avg_risk_pct DESC"
+      ]
+    },
+    {
+      "name": "high_risk_controls",
+      "displayName": "High Risk Controls",
+      "queryLines": [
+        "SELECT\n",
+        "  p.control_id,\n",
+        "  s.system_name,\n",
+        "  p.control_family_code,\n",
+        "  ROUND(p.risk_score * 100, 1) as risk_pct,\n",
+        "  p.historical_compliance,\n",
+        "  p.evidence_count,\n",
+        "  CASE p.gap_severity_score WHEN 4 THEN 'Critical' WHEN 3 THEN 'High' WHEN 2 THEN 'Medium' WHEN 1 THEN 'Low' ELSE 'None' END as gap_severity\n",
+        "FROM `grc_compliance_dev`.`03_gold`.control_risk_predictions p\n",
+        "JOIN `grc_compliance_dev`.`02_silver`.systems s ON p.system_id = s.system_id\n",
+        "WHERE p.risk_level = 'High'\n",
+        "ORDER BY p.risk_score DESC\n",
+        "LIMIT 20"
+      ]
+    },
+    {
+      "name": "compliance_alerts",
+      "displayName": "Compliance Alerts",
+      "queryLines": [
+        "SELECT\n",
+        "  alert_type,\n",
+        "  severity,\n",
+        "  COUNT(*) as alert_count\n",
+        "FROM `grc_compliance_dev`.`03_gold`.compliance_alerts\n",
+        "WHERE is_active = true\n",
+        "GROUP BY alert_type, severity\n",
+        "ORDER BY CASE severity WHEN 'CRITICAL' THEN 1 WHEN 'FAIL' THEN 2 WHEN 'WARN' THEN 3 ELSE 4 END"
+      ]
+    },
+    {
       "name": "compliance_by_family",
       "displayName": "Compliance by Control Family",
       "queryLines": [
@@ -1074,6 +1153,193 @@
             "width": 3,
             "height": 6
           }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "risk_analysis",
+      "displayName": "ML Risk Analysis",
+      "layout": [
+        {
+          "widget": {
+            "name": "risk_title",
+            "multilineTextboxSpec": {
+              "lines": [
+                "# ML-Powered Risk Analysis\n",
+                "## Predictive Control Risk Assessment"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "risk_level_pie",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "risk_by_level",
+                  "fields": [
+                    {"name": "risk_level", "expression": "`risk_level`"},
+                    {"name": "count", "expression": "`count`"}
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {"fieldName": "count", "scale": {"type": "quantitative"}, "displayName": "Count"},
+                "color": {
+                  "fieldName": "risk_level",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {"value": "High", "color": "#E92828"},
+                      {"value": "Medium", "color": "#FFF380"},
+                      {"value": "Low", "color": "#1acc92"}
+                    ]
+                  },
+                  "displayName": "Risk Level"
+                },
+                "label": {"show": true}
+              },
+              "frame": {"title": "Controls by Risk Level", "showTitle": true}
+            }
+          },
+          "position": {"x": 0, "y": 1, "width": 3, "height": 5}
+        },
+        {
+          "widget": {
+            "name": "risk_by_family_bar",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "risk_by_family",
+                  "fields": [
+                    {"name": "control_family_code", "expression": "`control_family_code`"},
+                    {"name": "high_risk", "expression": "`high_risk`"},
+                    {"name": "medium_risk", "expression": "`medium_risk`"},
+                    {"name": "low_risk", "expression": "`low_risk`"}
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "control_family_code",
+                  "scale": {"type": "categorical"},
+                  "displayName": "Control Family"
+                },
+                "y": {
+                  "fieldName": "high_risk",
+                  "scale": {"type": "quantitative"},
+                  "axis": {"title": "Risk Count"},
+                  "displayName": "High Risk"
+                }
+              },
+              "frame": {"title": "High Risk Controls by Family", "showTitle": true},
+              "mark": {"colors": ["#E92828"]}
+            }
+          },
+          "position": {"x": 3, "y": 1, "width": 3, "height": 5}
+        },
+        {
+          "widget": {
+            "name": "high_risk_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "high_risk_controls",
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {"fieldName": "control_id", "displayName": "Control ID"},
+                  {"fieldName": "system_name", "displayName": "System"},
+                  {"fieldName": "control_family_code", "displayName": "Family"},
+                  {"fieldName": "risk_pct", "displayName": "Risk %"},
+                  {"fieldName": "historical_compliance", "displayName": "Compliance Score"},
+                  {"fieldName": "evidence_count", "displayName": "Evidence"},
+                  {"fieldName": "gap_severity", "displayName": "Gap Severity"}
+                ]
+              },
+              "frame": {"title": "High Risk Controls - Priority Remediation", "showTitle": true}
+            }
+          },
+          "position": {"x": 0, "y": 6, "width": 6, "height": 6}
+        },
+        {
+          "widget": {
+            "name": "alerts_bar",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "compliance_alerts",
+                  "fields": [
+                    {"name": "alert_type", "expression": "`alert_type`"},
+                    {"name": "severity", "expression": "`severity`"},
+                    {"name": "alert_count", "expression": "`alert_count`"}
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "alert_type",
+                  "scale": {"type": "categorical"},
+                  "displayName": "Alert Type"
+                },
+                "y": {
+                  "fieldName": "alert_count",
+                  "scale": {"type": "quantitative"},
+                  "axis": {"title": "Alert Count"},
+                  "displayName": "Count"
+                },
+                "color": {
+                  "fieldName": "severity",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {"value": "CRITICAL", "color": "#E92828"},
+                      {"value": "FAIL", "color": "#FB8D3D"},
+                      {"value": "WARN", "color": "#FFF380"},
+                      {"value": "PASS", "color": "#1acc92"}
+                    ]
+                  },
+                  "displayName": "Severity"
+                }
+              },
+              "frame": {"title": "Active Compliance Alerts", "showTitle": true},
+              "mark": {"layout": "stack"}
+            }
+          },
+          "position": {"x": 0, "y": 12, "width": 6, "height": 5}
         }
       ],
       "pageType": "PAGE_TYPE_CANVAS"

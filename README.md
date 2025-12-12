@@ -23,6 +23,61 @@ grc_compliance_dev (Unity Catalog)
 |-- 03_gold      # Aggregations + ML outputs (scorecards, alerts, predictions)
 ```
 
+## Medallion ETL Flow (Bronze → Silver → Gold)
+
+The demo follows Databricks’ “medallion” pattern: each layer makes the data more usable and trustworthy.
+
+- **Bronze = raw ingestion**. Data is loaded exactly as received from Volumes into Delta tables. Think “source of record.”
+- **Silver = cleaned + validated**. IDs are standardized, types are fixed, and quality checks are applied so downstream logic is stable.
+- **Gold = business outputs**. Aggregations, scorecards, rule‑based alerts, and ML predictions that power the dashboard.
+
+```mermaid
+flowchart LR
+  subgraph Landing["00_landing (Volumes)"]
+    L1[NIST / SOC2 framework files]
+    L2[Operational files<br/>systems, assessments, evidence]
+  end
+
+  subgraph Bronze["01_bronze (Raw Delta tables)"]
+    B1[nist_800_53_controls]
+    B2[soc2_trust_criteria]
+    B3[control_mapping]
+    B4[systems_inventory]
+    B5[control_assessments]
+    B6[evidence_records]
+  end
+
+  subgraph Silver["02_silver (Cleaned + validated)"]
+    S1[nist_controls]
+    S2[soc2_criteria]
+    S3[systems]
+    S4[assessments]
+    S5[evidence]
+  end
+
+  subgraph Gold["03_gold (Business + ML outputs)"]
+    G1[control_compliance_summary]
+    G2[system_compliance_scorecard]
+    G3[cross_framework_mapping]
+    G4[evidence_gap_analysis]
+    G5[audit_readiness_metrics]
+    G6[compliance_alerts]
+    G7[control_risk_predictions]
+  end
+
+  L1 --> B1
+  L1 --> B2
+  L1 --> B3
+  L2 --> B4
+  L2 --> B5
+  L2 --> B6
+
+  B1 & B2 & B3 & B4 & B5 & B6 -->|`transform_silver_tables.py`| S1 & S2 & S3 & S4 & S5
+  S1 & S2 & S3 & S4 & S5 -->|`create_gold_tables.py`| G1 & G2 & G3 & G4 & G5
+  G4 & G2 -->|`compliance_rules.py`| G6
+  G4 & S4 & S3 -->|`risk_prediction.py`| G7
+```
+
 ### Bronze Layer
 ![Bronze Layer](bronze.png)
 
@@ -36,7 +91,10 @@ grc_compliance_dev (Unity Catalog)
 
 ### Prerequisites
 - Databricks workspace with Unity Catalog
-- Compute cluster or SQL Warehouse
+- Compute cluster or SQL Warehouse. For `risk_prediction.py`, use a Databricks ML runtime (or preinstall `mlflow`, `scikit-learn`, `shap`).
+
+### Configuration
+Default catalog/schema names and volume paths live in `code/utils/config.py`. Update that file if you want to run the demo under a different catalog or landing location.
 
 ### Deploy
 
@@ -63,6 +121,12 @@ grc_compliance_dev (Unity Catalog)
    code/05_Machine_Learning/compliance_rules.py
    code/05_Machine_Learning/risk_prediction.py
    ```
+
+4a. Quick validation (optional):
+   - Bronze tables exist: `SHOW TABLES IN grc_compliance_dev.01_bronze`
+   - Silver tables exist: `SHOW TABLES IN grc_compliance_dev.02_silver`
+   - Gold tables exist: `SHOW TABLES IN grc_compliance_dev.03_gold`
+   - `03_gold.audit_readiness_metrics` has a non‑null `audit_readiness_score`.
 
 5. Import dashboard:
    - SQL > Dashboards > Import

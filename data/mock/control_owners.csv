@@ -1,0 +1,21 @@
+control_family_code,owner_name,owner_email,backup_owner_name,backup_owner_email,business_unit,escalation_contact,last_review_date
+AC,Quinn Garcia,quinn.garcia@company.com,Quinn Garcia,quinn.garcia@company.com,Compliance,jordan.johnson@company.com,2024-03-02
+AT,Alex Davis,alex.davis@company.com,Avery Johnson,avery.johnson@company.com,Infrastructure,morgan.patel@company.com,2024-05-10
+AU,Morgan Chen,morgan.chen@company.com,Alex Kim,alex.kim@company.com,Compliance,riley.brown@company.com,2024-05-13
+CA,Riley Garcia,riley.garcia@company.com,Riley Patel,riley.patel@company.com,Legal,avery.kim@company.com,2024-05-24
+CM,Taylor Johnson,taylor.johnson@company.com,Riley Johnson,riley.johnson@company.com,IT Operations,taylor.williams@company.com,2024-09-02
+CP,Morgan Martinez,morgan.martinez@company.com,Morgan Patel,morgan.patel@company.com,Data Science,jordan.chen@company.com,2024-04-21
+IA,Taylor Rodriguez,taylor.rodriguez@company.com,Cameron Garcia,cameron.garcia@company.com,Engineering,casey.davis@company.com,2024-08-18
+IR,Riley Martinez,riley.martinez@company.com,Avery Davis,avery.davis@company.com,Engineering,cameron.kim@company.com,2024-05-21
+MA,Avery Kim,avery.kim@company.com,Quinn Kim,quinn.kim@company.com,Legal,riley.chen@company.com,2024-01-13
+MP,Riley Davis,riley.davis@company.com,Taylor Garcia,taylor.garcia@company.com,Security,drew.garcia@company.com,2024-08-05
+PE,Avery Brown,avery.brown@company.com,Jordan Rodriguez,jordan.rodriguez@company.com,Data Science,avery.patel@company.com,2024-07-26
+PL,Quinn Williams,quinn.williams@company.com,Casey Garcia,casey.garcia@company.com,Human Resources,riley.kim@company.com,2024-10-07
+PM,Alex Rodriguez,alex.rodriguez@company.com,Alex Garcia,alex.garcia@company.com,Security,cameron.johnson@company.com,2024-09-24
+PS,Alex Brown,alex.brown@company.com,Quinn Williams,quinn.williams@company.com,Engineering,casey.davis@company.com,2024-09-23
+PT,Morgan Brown,morgan.brown@company.com,Riley Martinez,riley.martinez@company.com,Infrastructure,drew.kim@company.com,2024-09-04
+RA,Morgan Rodriguez,morgan.rodriguez@company.com,Taylor Davis,taylor.davis@company.com,Security,cameron.chen@company.com,2024-07-27
+SA,Cameron Williams,cameron.williams@company.com,Cameron Williams,cameron.williams@company.com,Data Science,avery.martinez@company.com,2024-10-19
+SC,Casey Garcia,casey.garcia@company.com,Morgan Johnson,morgan.johnson@company.com,Finance,alex.rodriguez@company.com,2024-05-18
+SI,Alex Rodriguez,alex.rodriguez@company.com,Morgan Davis,morgan.davis@company.com,Engineering,jordan.garcia@company.com,2024-05-04
+SR,Quinn Johnson,quinn.johnson@company.com,Jordan Williams,jordan.williams@company.com,Legal,morgan.johnson@company.com,2024-06-04

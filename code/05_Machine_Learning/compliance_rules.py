@@ -7,11 +7,39 @@
 # COMMAND ----------
 
 from pyspark.sql.functions import expr, col, current_date, lit, when
-from pyspark.sql.types import StringType
 
-CATALOG = "grc_compliance_dev"
-SILVER = "02_silver"
-GOLD = "03_gold"
+import sys
+
+try:
+    notebook_path = (
+        dbutils.notebook.entry_point.getDbutils()
+        .notebook()
+        .getContext()
+        .notebookPath()
+        .get()
+    )
+    repo_root = "/Workspace" + "/".join(notebook_path.split("/")[:-2])
+    code_path = f"{repo_root}/code"
+    if code_path not in sys.path:
+        sys.path.insert(0, code_path)
+except Exception:
+    pass
+
+from utils.bootstrap import ensure_code_on_path
+
+ensure_code_on_path(dbutils=dbutils)
+from utils.config import (
+    CATALOG,
+    SILVER_SCHEMA,
+    GOLD_SCHEMA,
+    EVIDENCE_EXPIRY_WARNING,
+    REMEDIATION_WARNING,
+    ASSESSMENT_FRESHNESS,
+    COMPLIANCE_THRESHOLDS,
+)
+
+SILVER = SILVER_SCHEMA
+GOLD = GOLD_SCHEMA
 
 spark.sql(f"USE CATALOG {CATALOG}")
 
@@ -52,10 +80,10 @@ spark.sql(f"TRUNCATE TABLE {CATALOG}.{SILVER}.compliance_rules")
 expired_evidence_check = """
 CASE
   WHEN is_expired = true THEN 'FAIL'
-  WHEN days_until_expiry < 30 THEN 'WARN'
+  WHEN days_until_expiry < {expiry_warn} THEN 'WARN'
   ELSE 'PASS'
 END
-"""
+""".format(expiry_warn=EVIDENCE_EXPIRY_WARNING)
 insert_rule(
     'expired_evidence',
     'Evidence has expired or expires within 30 days',
@@ -70,10 +98,10 @@ overdue_remediation_check = """
 CASE
   WHEN is_overdue = true AND days_to_remediation < -30 THEN 'CRITICAL'
   WHEN is_overdue = true THEN 'FAIL'
-  WHEN days_to_remediation < 14 THEN 'WARN'
+  WHEN days_to_remediation < {rem_warn} THEN 'WARN'
   ELSE 'PASS'
 END
-"""
+""".format(rem_warn=REMEDIATION_WARNING)
 insert_rule(
     'overdue_remediation',
     'Remediation is overdue or due within 14 days',
@@ -86,11 +114,14 @@ insert_rule(
 # Rule 3: Assessment Freshness
 stale_assessment_check = """
 CASE
-  WHEN days_since_assessment > 365 THEN 'FAIL'
-  WHEN days_since_assessment > 270 THEN 'WARN'
+  WHEN days_since_assessment > {stale_critical} THEN 'FAIL'
+  WHEN days_since_assessment > {stale_warning} THEN 'WARN'
   ELSE 'PASS'
 END
-"""
+""".format(
+    stale_warning=ASSESSMENT_FRESHNESS["stale_warning"],
+    stale_critical=ASSESSMENT_FRESHNESS["stale_critical"],
+)
 insert_rule(
     'stale_assessment',
     'System assessment is older than 9 months',
@@ -103,12 +134,16 @@ insert_rule(
 # Rule 4: Critical System Coverage
 critical_system_check = """
 CASE
-  WHEN criticality = 'Critical' AND compliance_percentage < 90 THEN 'FAIL'
-  WHEN criticality = 'Critical' AND compliance_percentage < 95 THEN 'WARN'
-  WHEN criticality = 'High' AND compliance_percentage < 80 THEN 'WARN'
+  WHEN criticality = 'Critical' AND compliance_percentage < {crit_fail} THEN 'FAIL'
+  WHEN criticality = 'Critical' AND compliance_percentage < {crit_warn} THEN 'WARN'
+  WHEN criticality = 'High' AND compliance_percentage < {high_warn} THEN 'WARN'
   ELSE 'PASS'
 END
-"""
+""".format(
+    crit_fail=COMPLIANCE_THRESHOLDS["compliant"],
+    crit_warn=95,
+    high_warn=80,
+)
 insert_rule(
     'critical_system_coverage',
     'Critical/High systems must meet compliance thresholds',

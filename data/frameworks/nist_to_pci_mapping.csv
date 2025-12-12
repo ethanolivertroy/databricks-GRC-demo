@@ -1,0 +1,26 @@
+mapping_id,source_framework,source_control_id,target_framework,target_control_id,mapping_type,mapping_notes
+MAPPCI001,NIST_800_53_R5,SC-7,PCI_DSS_V4,PCI-1,equivalent,Network boundary protection aligns to PCI network security controls
+MAPPCI002,NIST_800_53_R5,AC-4,PCI_DSS_V4,PCI-1,related,Information flow enforcement supports segmentation requirements
+MAPPCI003,NIST_800_53_R5,CM-2,PCI_DSS_V4,PCI-2,equivalent,Baseline configurations map to secure configuration requirements
+MAPPCI004,NIST_800_53_R5,CM-6,PCI_DSS_V4,PCI-2,related,Configuration settings enforcement supports hardening
+MAPPCI005,NIST_800_53_R5,SC-28,PCI_DSS_V4,PCI-3,equivalent,Protection of information at rest aligns to stored data protection
+MAPPCI006,NIST_800_53_R5,MP-4,PCI_DSS_V4,PCI-3,related,Media storage controls support sensitive data handling
+MAPPCI007,NIST_800_53_R5,SC-8,PCI_DSS_V4,PCI-4,equivalent,Transmission confidentiality/integrity aligns to data-in-transit protection
+MAPPCI008,NIST_800_53_R5,SC-13,PCI_DSS_V4,PCI-4,related,Cryptographic protection supports secure transmission
+MAPPCI009,NIST_800_53_R5,SI-3,PCI_DSS_V4,PCI-5,equivalent,Malicious code protection maps to malware controls
+MAPPCI010,NIST_800_53_R5,SI-2,PCI_DSS_V4,PCI-5,related,Flaw remediation supports keeping protection effective
+MAPPCI011,NIST_800_53_R5,SA-11,PCI_DSS_V4,PCI-6,equivalent,Developer testing and evaluation aligns to secure SDLC
+MAPPCI012,NIST_800_53_R5,RA-5,PCI_DSS_V4,PCI-6,related,Vulnerability scanning supports secure software maintenance
+MAPPCI013,NIST_800_53_R5,AC-2,PCI_DSS_V4,PCI-7,equivalent,Account management aligns to restricting access
+MAPPCI014,NIST_800_53_R5,AC-6,PCI_DSS_V4,PCI-7,related,Least privilege supports need-to-know access
+MAPPCI015,NIST_800_53_R5,IA-2,PCI_DSS_V4,PCI-8,equivalent,User authentication requirements map to strong auth
+MAPPCI016,NIST_800_53_R5,IA-5,PCI_DSS_V4,PCI-8,related,Authenticator management supports credential hygiene
+MAPPCI017,NIST_800_53_R5,PE-2,PCI_DSS_V4,PCI-9,equivalent,Physical access authorizations align to facility controls
+MAPPCI018,NIST_800_53_R5,PE-3,PCI_DSS_V4,PCI-9,related,Physical access control mechanisms support PCI physical security
+MAPPCI019,NIST_800_53_R5,AU-2,PCI_DSS_V4,PCI-10,equivalent,Audit event logging aligns to monitoring access
+MAPPCI020,NIST_800_53_R5,AU-6,PCI_DSS_V4,PCI-10,related,Audit review supports timely detection
+MAPPCI021,NIST_800_53_R5,CA-2,PCI_DSS_V4,PCI-11,equivalent,Control assessments align to security testing
+MAPPCI022,NIST_800_53_R5,CA-7,PCI_DSS_V4,PCI-11,related,Continuous monitoring supports ongoing testing
+MAPPCI023,NIST_800_53_R5,PL-1,PCI_DSS_V4,PCI-12,equivalent,Security policy and procedures align to governance requirements
+MAPPCI024,NIST_800_53_R5,AT-2,PCI_DSS_V4,PCI-12,related,Security awareness training supports program maturity
+

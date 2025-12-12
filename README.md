@@ -6,8 +6,8 @@ Databricks-based compliance management system. Tracks NIST 800-53 and SOC2 contr
 
 ## What This Does
 
-- Ingests NIST 800-53 Rev 5 controls (188 controls) and SOC2 Trust Service Criteria
-- Maps controls across frameworks (100 NIST-to-SOC2 mappings)
+- Ingests NIST 800-53 Rev 5 controls, SOC2 Trust Service Criteria, plus simplified ISO 27001 and PCI‑DSS v4 catalogs for demo use
+- Maps NIST controls across frameworks (sample crosswalks to SOC2, ISO, and PCI‑DSS)
 - Tracks control assessments and evidence per system
 - Runs compliance rules to auto-flag issues
 - ML model predicts which controls are likely to fail
@@ -34,31 +34,37 @@ The demo follows Databricks’ “medallion” pattern: each layer makes the dat
 ```mermaid
 flowchart LR
   subgraph Landing["00_landing (Volumes)"]
-    L1[NIST / SOC2 framework files]
+    L1[NIST / SOC2 / ISO / PCI framework files]
     L2[Operational files<br/>systems, assessments, evidence]
   end
 
   subgraph Bronze["01_bronze (Raw Delta tables)"]
     B1[nist_800_53_controls]
     B2[soc2_trust_criteria]
-    B3[control_mapping]
-    B4[systems_inventory]
-    B5[control_assessments]
-    B6[evidence_records]
+    B3[iso_27001_controls]
+    B4[pci_dss_v4_controls]
+    B5[control_mapping<br/>(NIST→SOC2/ISO/PCI)]
+    B6[systems_inventory]
+    B7[control_assessments]
+    B8[evidence_records]
   end
 
   subgraph Silver["02_silver (Cleaned + validated)"]
     S1[nist_controls]
     S2[soc2_criteria]
-    S3[systems]
-    S4[assessments]
-    S5[evidence]
+    S3[iso_controls]
+    S4[pci_controls]
+    S5[systems]
+    S6[assessments]
+    S7[evidence]
   end
 
   subgraph Gold["03_gold (Business + ML outputs)"]
     G1[control_compliance_summary]
     G2[system_compliance_scorecard]
     G3[cross_framework_mapping]
+    G3b[framework_control_compliance]
+    G3c[framework_compliance_summary]
     G4[evidence_gap_analysis]
     G5[audit_readiness_metrics]
     G6[compliance_alerts]
@@ -68,14 +74,16 @@ flowchart LR
   L1 --> B1
   L1 --> B2
   L1 --> B3
-  L2 --> B4
-  L2 --> B5
+  L1 --> B4
+  L1 --> B5
   L2 --> B6
+  L2 --> B7
+  L2 --> B8
 
-  B1 & B2 & B3 & B4 & B5 & B6 -->|`transform_silver_tables.py`| S1 & S2 & S3 & S4 & S5
-  S1 & S2 & S3 & S4 & S5 -->|`create_gold_tables.py`| G1 & G2 & G3 & G4 & G5
+  B1 & B2 & B3 & B4 & B5 & B6 & B7 & B8 -->|`transform_silver_tables.py`| S1 & S2 & S3 & S4 & S5 & S6 & S7
+  S1 & S2 & S3 & S4 & S5 & S6 & S7 -->|`create_gold_tables.py`| G1 & G2 & G3 & G3b & G3c & G4 & G5
   G4 & G2 -->|`compliance_rules.py`| G6
-  G4 & S4 & S3 -->|`risk_prediction.py`| G7
+  G4 & S6 & S5 -->|`risk_prediction.py`| G7
 ```
 
 ### Bronze Layer
@@ -139,7 +147,9 @@ Default catalog/schema names and volume paths live in `code/utils/config.py`. Up
 |-------|---------|-------------|
 | nist_800_53_controls | 188 | NIST control catalog |
 | soc2_trust_criteria | 64 | SOC2 TSC definitions |
-| control_mapping | 100 | NIST-to-SOC2 crosswalk |
+| iso_27001_controls | 36 | ISO 27001 control catalog (simplified) |
+| pci_dss_v4_controls | 12 | PCI‑DSS v4 requirement catalog (simplified) |
+| control_mapping | sample | NIST crosswalk to SOC2 / ISO / PCI |
 | systems_inventory | 50 | Systems under assessment |
 | control_assessments | ~1500 | Assessment records |
 | evidence_records | 200 | Evidence uploads |
@@ -149,7 +159,9 @@ Default catalog/schema names and volume paths live in `code/utils/config.py`. Up
 |-------|---------|
 | control_compliance_summary | Compliance % by control family |
 | system_compliance_scorecard | Per-system posture |
-| cross_framework_mapping | NIST-SOC2 with compliance status |
+| cross_framework_mapping | NIST mapped to SOC2 / ISO / PCI with compliance |
+| framework_control_compliance | Derived compliance per SOC2/ISO/PCI control |
+| framework_compliance_summary | High-level compliance by framework |
 | evidence_gap_analysis | Missing/expiring evidence |
 | audit_readiness_metrics | Executive readiness score |
 | compliance_alerts | Rule engine output |
@@ -213,6 +225,10 @@ databricks-GRC-demo/
 - PySpark
 - MLflow
 - Databricks SQL Dashboards
+
+## Authoritative Sources
+
+Framework inputs live in `data/frameworks/`. NIST is pulled from public‑domain CSRC controls; SOC2, ISO 27001, and PCI‑DSS catalogs are simplified **synthetic demo extracts** due to licensing. Gold rollups for SOC2/ISO/PCI are therefore derived from NIST assessments via the sample mappings and should be treated as illustrative, not audit‑ready. See `data/frameworks/SOURCES.md` for official sources and how to replace files with licensed versions.
 
 ## License
 

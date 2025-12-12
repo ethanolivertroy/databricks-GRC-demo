@@ -1,0 +1,14 @@
+control_id,control_name,control_domain,control_objective,implementation_guidance
+PCI-1,Network security controls,Network Security,Ensure networks are segmented and protected from unauthorized access,Maintain documented firewall/segmentation standards and review rules quarterly
+PCI-2,Secure configurations,Secure Configuration,Keep systems hardened and configured to approved baselines,Apply CIS-style hardening, disable unused services, and track drift
+PCI-3,Protect stored account data,Data Protection,Prevent sensitive payment data from being stored or exposed at rest,Use strong encryption and tokenization; minimize storage and retention
+PCI-4,Protect data in transit,Data Protection,Ensure sensitive data is protected while moving across networks,Enforce TLS 1.2+ and secure key management for all transmissions
+PCI-5,Malware protection,Endpoint Security,Detect and prevent malware across endpoints and servers,Deploy EDR/AV, keep signatures current, and alert on detections
+PCI-6,Secure systems and software,Secure Development,Reduce vulnerabilities through secure SDLC and patching,Run SAST/DAST, remediate critical findings, patch within defined SLAs
+PCI-7,Restrict access by need-to-know,Access Control,Limit access to sensitive data and systems to authorized roles,Implement RBAC and review privileged access monthly
+PCI-8,Identify and authenticate access,Identity & Authentication,Ensure all access is uniquely identified and strongly authenticated,Require MFA for admin and remote access; rotate secrets regularly
+PCI-9,Restrict physical access,Physical Security,Protect facilities and hardware from physical compromise,Badge-controlled entry, visitor logging, and periodic access reviews
+PCI-10,Log and monitor access,Logging & Monitoring,Provide audit trails and timely detection of suspicious activity,Centralize logs, retain for 12+ months, and alert on anomalies
+PCI-11,Test security systems,Security Testing,Validate security controls through regular testing,Run quarterly vulnerability scans and annual penetration tests
+PCI-12,Information security program,Governance,Establish policies and training that sustain compliance,Maintain security policies, annual training, and exception governance
+

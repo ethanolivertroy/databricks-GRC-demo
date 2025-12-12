@@ -66,7 +66,14 @@ except Exception:
     repo_root = "/Workspace"
 
 from utils.bootstrap import ensure_code_on_path
-from utils.config import CATALOG, FRAMEWORKS_PATH, SYSTEMS_PATH, ASSESSMENTS_PATH, EVIDENCE_PATH
+from utils.config import (
+    CATALOG,
+    FRAMEWORKS_PATH,
+    SYSTEMS_PATH,
+    ASSESSMENTS_PATH,
+    EVIDENCE_PATH,
+    FRAMEWORK_FILES,
+)
 
 # Normalize repo root (handles non-Databricks runs).
 repo_root = ensure_code_on_path(dbutils=dbutils)
@@ -93,9 +100,13 @@ dest_evidence = EVIDENCE_PATH
 
 # Copy framework files
 framework_files = [
-    "nist_800_53_rev5_controls.csv",
-    "soc2_tsc_2017.csv",
-    "nist_to_soc2_mapping.csv"
+    FRAMEWORK_FILES["nist_controls"],
+    FRAMEWORK_FILES["soc2_criteria"],
+    FRAMEWORK_FILES["iso_controls"],
+    FRAMEWORK_FILES["pci_controls"],
+    FRAMEWORK_FILES["nist_soc2_mapping"],
+    FRAMEWORK_FILES["nist_iso_mapping"],
+    FRAMEWORK_FILES["nist_pci_mapping"],
 ]
 
 for filename in framework_files:

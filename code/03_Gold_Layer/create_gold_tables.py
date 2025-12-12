@@ -37,6 +37,7 @@ from utils.bootstrap import ensure_code_on_path
 
 ensure_code_on_path(dbutils=dbutils)
 from utils.config import CATALOG, SILVER_SCHEMA, GOLD_SCHEMA, BRONZE_SCHEMA, COMPLIANCE_THRESHOLDS
+from utils.config import FRAMEWORK_IDS
 
 SILVER = SILVER_SCHEMA
 GOLD = GOLD_SCHEMA
@@ -166,12 +167,14 @@ display(df_system_scorecard.orderBy("compliance_percentage"))
 
 # MAGIC %md
 # MAGIC ## 3. Cross-Framework Control Mapping
-# MAGIC NIST 800-53 to SOC2 mapping with compliance status
+# MAGIC NIST 800-53 mapped to SOC2, ISO 27001, and PCI-DSS
 
 # COMMAND ----------
 
 df_nist = spark.table(f"{CATALOG}.{SILVER}.nist_controls")
 df_soc2 = spark.table(f"{CATALOG}.{SILVER}.soc2_criteria")
+df_iso = spark.table(f"{CATALOG}.{SILVER}.iso_controls")
+df_pci = spark.table(f"{CATALOG}.{SILVER}.pci_controls")
 df_mapping = spark.table(f"{CATALOG}.{BRONZE}.control_mapping")
 df_assessments = spark.table(f"{CATALOG}.{SILVER}.assessments")
 
@@ -186,49 +189,124 @@ control_compliance = (
     )
 )
 
-# Build cross-framework view
+df_mapping_nist = df_mapping.filter(col("source_framework") == FRAMEWORK_IDS["nist"])
+
+df_mapping_soc2 = df_mapping_nist.filter(col("target_framework") == FRAMEWORK_IDS["soc2"])
+df_mapping_iso = df_mapping_nist.filter(col("target_framework") == FRAMEWORK_IDS["iso"])
+df_mapping_pci = df_mapping_nist.filter(col("target_framework") == FRAMEWORK_IDS["pci"])
+
+def build_cross_view(target_df, mapping_df, target_id_col, target_name_col, target_domain_col, target_framework):
+    return (
+        df_nist.alias("n")
+        .join(mapping_df.alias("m"), col("n.control_id") == col("m.source_control_id"), "left")
+        .join(target_df.alias("t"), col("m.target_control_id") == col(f"t.{target_id_col}"), "left")
+        .join(control_compliance.alias("c"), col("n.control_id") == col("c.control_id"), "left")
+        .select(
+            col("n.control_id").alias("nist_control_id"),
+            col("n.control_name").alias("nist_control_name"),
+            col("n.control_family").alias("nist_family"),
+            col("n.control_family_code").alias("nist_family_code"),
+            col("n.baseline_low"),
+            col("n.baseline_moderate"),
+            col("n.baseline_high"),
+            lit(target_framework).alias("target_framework"),
+            col("m.target_control_id").alias("target_control_id"),
+            col(f"t.{target_name_col}").alias("target_control_name"),
+            col(f"t.{target_domain_col}").alias("target_domain"),
+            col("m.mapping_type"),
+            col("m.mapping_notes"),
+            coalesce(col("c.systems_assessed"), lit(0)).alias("systems_in_scope"),
+            spark_round(coalesce(col("c.avg_compliance_pct"), lit(0)), 1).alias("avg_compliance_pct"),
+            coalesce(col("c.total_assessments"), lit(0)).alias("total_assessments"),
+        )
+        .withColumn(
+            "mapping_coverage",
+            when(col("target_control_id").isNotNull(), "Mapped").otherwise("Gap - No Mapping"),
+        )
+        .withColumn("snapshot_date", current_date())
+    )
+
+df_cross_soc2 = build_cross_view(
+    target_df=df_soc2,
+    mapping_df=df_mapping_soc2,
+    target_id_col="tsc_id",
+    target_name_col="tsc_name",
+    target_domain_col="tsc_category",
+    target_framework=FRAMEWORK_IDS["soc2"],
+)
+
+df_cross_iso = build_cross_view(
+    target_df=df_iso,
+    mapping_df=df_mapping_iso,
+    target_id_col="control_id",
+    target_name_col="control_name",
+    target_domain_col="control_domain",
+    target_framework=FRAMEWORK_IDS["iso"],
+)
+
+df_cross_pci = build_cross_view(
+    target_df=df_pci,
+    mapping_df=df_mapping_pci,
+    target_id_col="control_id",
+    target_name_col="control_name",
+    target_domain_col="control_domain",
+    target_framework=FRAMEWORK_IDS["pci"],
+)
+
 df_cross_framework = (
-    df_nist.alias("n")
-    .join(
-        df_mapping.alias("m"),
-        col("n.control_id") == col("m.source_control_id"),
-        "left"
-    )
-    .join(
-        df_soc2.alias("s"),
-        col("m.target_control_id") == col("s.tsc_id"),
-        "left"
-    )
-    .join(
-        control_compliance.alias("c"),
-        col("n.control_id") == col("c.control_id"),
-        "left"
-    )
-    .select(
-        col("n.control_id").alias("nist_control_id"),
-        col("n.control_name").alias("nist_control_name"),
-        col("n.control_family").alias("nist_family"),
-        col("n.control_family_code").alias("nist_family_code"),
-        col("n.baseline_low"),
-        col("n.baseline_moderate"),
-        col("n.baseline_high"),
-        col("m.target_control_id").alias("soc2_tsc_id"),
-        col("s.tsc_name").alias("soc2_tsc_name"),
-        col("s.tsc_category").alias("soc2_category"),
-        col("m.mapping_type"),
-        coalesce(col("c.systems_assessed"), lit(0)).alias("systems_in_scope"),
-        spark_round(coalesce(col("c.avg_compliance_pct"), lit(0)), 1).alias("avg_compliance_pct"),
-        coalesce(col("c.total_assessments"), lit(0)).alias("total_assessments")
-    )
-    .withColumn("mapping_coverage",
-        when(col("soc2_tsc_id").isNotNull(), "Mapped")
-        .otherwise("Gap - No SOC2 Mapping"))
-    .withColumn("snapshot_date", current_date())
+    df_cross_soc2.unionByName(df_cross_iso).unionByName(df_cross_pci)
 )
 
 df_cross_framework.write.mode("overwrite").saveAsTable(f"{CATALOG}.{GOLD}.cross_framework_mapping")
 print(f"Created gold.cross_framework_mapping")
 display(df_cross_framework.limit(20))
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## 3a. Framework Control Compliance (Derived)
+# MAGIC Roll NIST assessment results up to mapped controls in other frameworks.
+
+# COMMAND ----------
+
+df_framework_control_compliance = (
+    df_cross_framework
+    .filter(col("target_control_id").isNotNull())
+    .groupBy(
+        "target_framework",
+        "target_control_id",
+        "target_control_name",
+        "target_domain",
+    )
+    .agg(
+        avg("avg_compliance_pct").alias("avg_compliance_pct"),
+        countDistinct("nist_control_id").alias("mapped_nist_controls"),
+        max("systems_in_scope").alias("systems_in_scope"),
+        sum("total_assessments").alias("total_assessments"),
+    )
+    .withColumn("snapshot_date", current_date())
+)
+
+df_framework_control_compliance.write.mode("overwrite").saveAsTable(
+    f"{CATALOG}.{GOLD}.framework_control_compliance"
+)
+print("Created gold.framework_control_compliance")
+
+df_framework_compliance_summary = (
+    df_framework_control_compliance
+    .groupBy("target_framework")
+    .agg(
+        count("*").alias("controls_mapped"),
+        spark_round(avg("avg_compliance_pct"), 1).alias("avg_compliance_pct"),
+        sum("mapped_nist_controls").alias("total_mapped_nist_controls"),
+    )
+    .withColumn("snapshot_date", current_date())
+)
+
+df_framework_compliance_summary.write.mode("overwrite").saveAsTable(
+    f"{CATALOG}.{GOLD}.framework_compliance_summary"
+)
+print("Created gold.framework_compliance_summary")
 
 # COMMAND ----------
 

@@ -14,10 +14,31 @@ SYSTEMS_PATH = f"{VOLUMES_BASE}/systems"
 ASSESSMENTS_PATH = f"{VOLUMES_BASE}/assessments"
 EVIDENCE_PATH = f"{VOLUMES_BASE}/evidence"
 
+# Supported compliance frameworks (used in mappings/Gold outputs)
+FRAMEWORK_IDS = {
+    "nist": "NIST_800_53_R5",
+    "soc2": "SOC2_TSC_2017",
+    "iso": "ISO_27001",
+    "pci": "PCI_DSS_V4",
+}
+
+# Framework file names in `data/frameworks/`
+FRAMEWORK_FILES = {
+    "nist_controls": "nist_800_53_rev5_controls.csv",
+    "soc2_criteria": "soc2_tsc_2017.csv",
+    "iso_controls": "iso_27001_controls.csv",
+    "pci_controls": "pci_dss_v4_controls.csv",
+    "nist_soc2_mapping": "nist_to_soc2_mapping.csv",
+    "nist_iso_mapping": "nist_to_iso_mapping.csv",
+    "nist_pci_mapping": "nist_to_pci_mapping.csv",
+}
+
 # Table Names - Bronze
 BRONZE_TABLES = {
     "nist_controls": f"{CATALOG}.{BRONZE_SCHEMA}.nist_800_53_controls",
     "soc2_criteria": f"{CATALOG}.{BRONZE_SCHEMA}.soc2_trust_criteria",
+    "iso_controls": f"{CATALOG}.{BRONZE_SCHEMA}.iso_27001_controls",
+    "pci_controls": f"{CATALOG}.{BRONZE_SCHEMA}.pci_dss_v4_controls",
     "control_mapping": f"{CATALOG}.{BRONZE_SCHEMA}.control_mapping",
     "systems": f"{CATALOG}.{BRONZE_SCHEMA}.systems_inventory",
     "assessments": f"{CATALOG}.{BRONZE_SCHEMA}.control_assessments",
@@ -28,6 +49,8 @@ BRONZE_TABLES = {
 SILVER_TABLES = {
     "nist_controls": f"{CATALOG}.{SILVER_SCHEMA}.nist_controls",
     "soc2_criteria": f"{CATALOG}.{SILVER_SCHEMA}.soc2_criteria",
+    "iso_controls": f"{CATALOG}.{SILVER_SCHEMA}.iso_controls",
+    "pci_controls": f"{CATALOG}.{SILVER_SCHEMA}.pci_controls",
     "systems": f"{CATALOG}.{SILVER_SCHEMA}.systems",
     "assessments": f"{CATALOG}.{SILVER_SCHEMA}.assessments",
     "evidence": f"{CATALOG}.{SILVER_SCHEMA}.evidence",
@@ -38,6 +61,8 @@ GOLD_TABLES = {
     "compliance_summary": f"{CATALOG}.{GOLD_SCHEMA}.control_compliance_summary",
     "system_scorecard": f"{CATALOG}.{GOLD_SCHEMA}.system_compliance_scorecard",
     "framework_mapping": f"{CATALOG}.{GOLD_SCHEMA}.cross_framework_mapping",
+    "framework_control_compliance": f"{CATALOG}.{GOLD_SCHEMA}.framework_control_compliance",
+    "framework_compliance_summary": f"{CATALOG}.{GOLD_SCHEMA}.framework_compliance_summary",
     "evidence_gaps": f"{CATALOG}.{GOLD_SCHEMA}.evidence_gap_analysis",
     "audit_readiness": f"{CATALOG}.{GOLD_SCHEMA}.audit_readiness_metrics",
     "compliance_alerts": f"{CATALOG}.{GOLD_SCHEMA}.compliance_alerts",

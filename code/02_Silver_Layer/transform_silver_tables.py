@@ -98,6 +98,50 @@ print(f"Created silver.soc2_criteria with {df_soc2_silver.count()} rows")
 # COMMAND ----------
 
 # MAGIC %md
+# MAGIC ## Transform ISO 27001 Controls
+
+# COMMAND ----------
+
+df_iso = spark.table(f"{CATALOG}.{BRONZE}.iso_27001_controls")
+
+df_iso_silver = (
+    df_iso
+    .withColumn("control_id", upper(trim(col("control_id"))))
+    .withColumn("control_domain", initcap(trim(col("control_domain"))))
+    .withColumn("control_domain_code", regexp_extract(col("control_id"), "^A\\.([0-9]+)", 1))
+)
+
+invalid_iso = df_iso_silver.filter("control_id IS NULL").count()
+print(f"Invalid ISO control IDs: {invalid_iso}")
+
+df_iso_silver.write.mode("overwrite").saveAsTable(f"{CATALOG}.{SILVER}.iso_controls")
+print(f"Created silver.iso_controls with {df_iso_silver.count()} rows")
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ## Transform PCI-DSS Controls
+
+# COMMAND ----------
+
+df_pci = spark.table(f"{CATALOG}.{BRONZE}.pci_dss_v4_controls")
+
+df_pci_silver = (
+    df_pci
+    .withColumn("control_id", upper(trim(col("control_id"))))
+    .withColumn("control_domain", initcap(trim(col("control_domain"))))
+    .withColumn("requirement_number", regexp_extract(col("control_id"), "PCI-([0-9]+)", 1).cast("int"))
+)
+
+invalid_pci = df_pci_silver.filter("control_id IS NULL").count()
+print(f"Invalid PCI control IDs: {invalid_pci}")
+
+df_pci_silver.write.mode("overwrite").saveAsTable(f"{CATALOG}.{SILVER}.pci_controls")
+print(f"Created silver.pci_controls with {df_pci_silver.count()} rows")
+
+# COMMAND ----------
+
+# MAGIC %md
 # MAGIC ## Transform Systems Inventory
 
 # COMMAND ----------
@@ -229,7 +273,15 @@ print(f"Created silver.evidence with {df_evidence_silver.count()} rows")
 # Summary statistics
 print("=== Silver Layer Summary ===\n")
 
-for table in ["nist_controls", "soc2_criteria", "systems", "assessments", "evidence"]:
+for table in [
+    "nist_controls",
+    "soc2_criteria",
+    "iso_controls",
+    "pci_controls",
+    "systems",
+    "assessments",
+    "evidence",
+]:
     count = spark.table(f"{CATALOG}.{SILVER}.{table}").count()
     print(f"{table}: {count} rows")
 

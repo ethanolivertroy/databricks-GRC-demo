@@ -16,3 +16,12 @@ __pycache__/
 
 # Claude settings
 .claude/
+
+# Proprietary framework content — do not commit
+# ISO 27001 (ISO/IEC), PCI-DSS (PCI SSC), SOC 2 TSC (AICPA) are copyrighted;
+# redistribution of their control text, IDs, or close paraphrases is restricted.
+data/frameworks/soc2_tsc_*
+data/frameworks/iso_*
+data/frameworks/pci_*
+data/frameworks/nist_to_iso_*
+data/frameworks/nist_to_pci_*
